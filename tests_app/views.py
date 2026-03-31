@@ -10,6 +10,7 @@ from datetime import timedelta
 from .models import Test, Question, Answer, Result, Profile
 from .forms import TestForm
 import random
+from django.conf import settings
 from django.core.mail import send_mail
 TEACHER_SECRET = "TEACHER2026"
 
@@ -273,7 +274,7 @@ def register_view(request):
             messages.error(request, "Пароли не совпадают")
             return redirect('register')
 
-        if role == 'teacher' and secret != TEACHER_SECRET:
+        if role == 'teacher' and secret != settings.TEACHER_SECRET_KEY:
             messages.error(request, "Неверный секретный код преподавателя")
             return redirect('register')
 
