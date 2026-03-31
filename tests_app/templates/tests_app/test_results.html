@@ -1,0 +1,23 @@
+{% extends "tests_app/base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <h3>Результаты по тесту: {{ test.title }}</h3>
+
+    {% for result in results %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <strong>{{ result.student.username }}</strong><br>
+                Баллы: {{ result.score }}<br>
+                Процент: {{ result.percent }}%<br>
+                Оценка: {{ result.grade }}
+            </div>
+        </div>
+    {% empty %}
+        <div class="alert alert-info">
+            Пока никто не проходил этот тест.
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

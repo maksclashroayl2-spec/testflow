@@ -1,0 +1,549 @@
+[
+  {
+    "model": "tests_app.test",
+    "pk": 1,
+    "fields": {
+      "title": "Разработка, администрирование и защита баз данных"
+    }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 1,
+    "fields": {
+      "test": 1,
+      "text": "Какова основная цель проектирования базы данных?"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1,
+    "fields": {
+      "question": 1,
+      "text": "Минимизация избыточности данных",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 2,
+    "fields": {
+      "question": 1,
+      "text": "Повышение целостности и согласованности данных",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 3,
+    "fields": {
+      "question": 1,
+      "text": "Увеличение объема оперативной памяти",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 4,
+    "fields": {
+      "question": 1,
+      "text": "Упрощение интерфейса пользователя",
+      "is_correct": false
+    }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 2,
+    "fields": {
+      "test": 1,
+      "text": "Что относится к функциям администратора баз данных? (В вопросе два правильных варианта ответа)"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 5,
+    "fields": {
+      "question": 2,
+      "text": "Резервное копирование данных",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 6,
+    "fields": {
+      "question": 2,
+      "text": "Управление правами доступа пользователей",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 7,
+    "fields": {
+      "question": 2,
+      "text": "Разработка пользовательского интерфейса",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 8,
+    "fields": {
+      "question": 2,
+      "text": "Верстка веб-страниц",
+      "is_correct": false
+    }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 3,
+    "fields": {
+      "test": 1,
+      "text": "Что такое предметная область в контексте проектирования базы данных?"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 9,
+    "fields": {
+      "question": 3,
+      "text": "Совокупность объектов и связей реального мира",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 10,
+    "fields": {
+      "question": 3,
+      "text": "Набор программных модулей",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 11,
+    "fields": {
+      "question": 3,
+      "text": "Операционная система",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 12,
+    "fields": {
+      "question": 3,
+      "text": "Язык программирования",
+      "is_correct": false
+    }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 4,
+    "fields": {
+      "test": 1,
+      "text": "Какие этапы включает процесс проектирования базы данных? (В вопросе два правильных варианта ответа)"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 13,
+    "fields": {
+      "question": 4,
+      "text": "Анализ предметной области",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 14,
+    "fields": {
+      "question": 4,
+      "text": "Логическое проектирование структуры данных",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 15,
+    "fields": {
+      "question": 4,
+      "text": "Установка драйверов устройств",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 16,
+    "fields": {
+      "question": 4,
+      "text": "Настройка графического интерфейса",
+      "is_correct": false
+    }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 5,
+    "fields": {
+      "test": 1,
+      "text": "Какая СУБД относится к реляционным?"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 17,
+    "fields": {
+      "question": 5,
+      "text": "MySQL",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 18,
+    "fields": {
+      "question": 5,
+      "text": "MongoDB",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 19,
+    "fields": {
+      "question": 5,
+      "text": "Redis",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 20,
+    "fields": {
+      "question": 5,
+      "text": "Neo4j",
+      "is_correct": false
+    }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 6,
+    "fields": {
+      "test": 1,
+      "text": "Что обеспечивает целостность данных в базе данных?"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 21,
+    "fields": {
+      "question": 6,
+      "text": "Ограничения целостности",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 22,
+    "fields": {
+      "question": 6,
+      "text": "Форматирование диска",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 23,
+    "fields": {
+      "question": 6,
+      "text": "Сжатие данных",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 24,
+    "fields": {
+      "question": 6,
+      "text": "Увеличение частоты процессора",
+      "is_correct": false
+    }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 7,
+    "fields": {
+      "test": 1,
+      "text": "Какой язык используется для работы с реляционными базами данных?"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 25,
+    "fields": {
+      "question": 7,
+      "text": "SQL",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 26,
+    "fields": {
+      "question": 7,
+      "text": "HTML",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 27,
+    "fields": {
+      "question": 7,
+      "text": "CSS",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 28,
+    "fields": {
+      "question": 7,
+      "text": "JavaScript",
+      "is_correct": false
+    }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 8,
+    "fields": {
+      "test": 1,
+      "text": "Что относится к мерам защиты информации в базе данных? (В вопросе два правильных варианта ответа)"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 29,
+    "fields": {
+      "question": 8,
+      "text": "Разграничение прав доступа",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 30,
+    "fields": {
+      "question": 8,
+      "text": "Шифрование данных",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 31,
+    "fields": {
+      "question": 8,
+      "text": "Увеличение объема жесткого диска",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 32,
+    "fields": {
+      "question": 8,
+      "text": "Оптимизация интерфейса",
+      "is_correct": false
+    }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 9,
+    "fields": {
+      "test": 1,
+      "text": "Для чего используется резервное копирование базы данных?"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 33,
+    "fields": {
+      "question": 9,
+      "text": "Восстановление данных при сбоях",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 34,
+    "fields": {
+      "question": 9,
+      "text": "Ускорение работы базы данных",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 35,
+    "fields": {
+      "question": 9,
+      "text": "Уменьшение размера таблиц",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 36,
+    "fields": {
+      "question": 9,
+      "text": "Изменение структуры данных",
+      "is_correct": false
+    }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 10,
+    "fields": {
+      "test": 1,
+      "text": "Что такое первичный ключ в таблице базы данных?"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 37,
+    "fields": {
+      "question": 10,
+      "text": "Уникальный идентификатор записи",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 38,
+    "fields": {
+      "question": 10,
+      "text": "Поле для хранения текста",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 39,
+    "fields": {
+      "question": 10,
+      "text": "Тип данных",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 40,
+    "fields": {
+      "question": 10,
+      "text": "Индекс таблицы",
+      "is_correct": false
+    }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 11,
+    "fields": {
+      "test": 1,
+      "text": "Что относится к объектам базы данных?"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 41,
+    "fields": {
+      "question": 11,
+      "text": "Таблицы",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 42,
+    "fields": {
+      "question": 11,
+      "text": "Процессы операционной системы",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 43,
+    "fields": {
+      "question": 11,
+      "text": "Драйверы устройств",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 44,
+    "fields": {
+      "question": 11,
+      "text": "Файловая система",
+      "is_correct": false
+    }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 12,
+    "fields": {
+      "test": 1,
+      "text": "Какова основная задача защиты баз данных?"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 45,
+    "fields": {
+      "question": 12,
+      "text": "Предотвращение несанкционированного доступа",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 46,
+    "fields": {
+      "question": 12,
+      "text": "Ускорение обработки запросов",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 47,
+    "fields": {
+      "question": 12,
+      "text": "Уменьшение нагрузки на сервер",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 48,
+    "fields": {
+      "question": 12,
+      "text": "Оптимизация дизайна интерфейса",
+      "is_correct": false
+    }
+  }
+]

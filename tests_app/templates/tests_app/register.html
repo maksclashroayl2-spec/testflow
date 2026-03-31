@@ -1,0 +1,263 @@
+{% extends "tests_app/base.html" %}
+{% block title %}Регистрация | TestFlow{% endblock %}
+
+{% block content %}
+
+<style>
+.auth-page {
+    min-height: 72vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-shell {
+    width: 100%;
+    max-width: 1120px;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 28px;
+    align-items: stretch;
+}
+
+.auth-info {
+    position: relative;
+    overflow: hidden;
+    border-radius: 30px;
+    padding: 42px 38px;
+    background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.12), transparent 22%),
+        linear-gradient(135deg, rgba(255,255,255,0.9), rgba(246,250,255,0.95));
+    border: 1px solid rgba(226, 232, 240, 0.85);
+    box-shadow: 0 22px 60px rgba(15, 23, 42, 0.08);
+}
+
+.auth-info-content {
+    position: relative;
+    z-index: 1;
+}
+
+.auth-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    font-weight: 700;
+    font-size: .92rem;
+    margin-bottom: 18px;
+}
+
+.auth-title {
+    font-size: 2.3rem;
+    font-weight: 800;
+    line-height: 1.15;
+    color: #0f172a;
+    margin-bottom: 16px;
+}
+
+.auth-subtitle {
+    color: #64748b;
+    line-height: 1.8;
+    margin-bottom: 26px;
+    max-width: 520px;
+}
+
+.auth-feature {
+    background: rgba(255,255,255,0.72);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 18px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+}
+
+.auth-feature-title {
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 6px;
+}
+
+.auth-feature-text {
+    color: #64748b;
+    margin: 0;
+    line-height: 1.7;
+}
+
+.auth-card {
+    background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(226, 232, 240, 0.85);
+    border-radius: 30px;
+    padding: 36px 32px;
+    box-shadow: 0 22px 60px rgba(15, 23, 42, 0.08);
+}
+
+.auth-card-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.auth-card-subtitle {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 26px;
+}
+
+.form-label {
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.message-box .alert {
+    margin-bottom: 14px;
+    border-radius: 14px;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 18px;
+    color: #64748b;
+}
+
+.auth-footer a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 992px) {
+    .auth-shell {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .auth-card,
+    .auth-info {
+        padding: 26px 20px;
+        border-radius: 22px;
+    }
+
+    .auth-title {
+        font-size: 1.8rem;
+    }
+
+    .auth-card-title {
+        font-size: 1.65rem;
+    }
+}
+</style>
+
+<div class="auth-page">
+    <div class="auth-shell">
+
+        <div class="auth-info">
+            <div class="auth-info-content">
+                <div class="auth-badge">✨ Регистрация</div>
+
+                <h1 class="auth-title">Создай аккаунт в TestFlow</h1>
+
+                <p class="auth-subtitle">
+                    Зарегистрируйся, чтобы проходить тесты, отслеживать результаты
+                    и пользоваться всеми возможностями платформы.
+                </p>
+
+                <div class="auth-feature">
+                    <div class="auth-feature-title">Email-подтверждение</div>
+                    <p class="auth-feature-text">
+                        Мы проверим, что email принадлежит тебе — это защита от фейков.
+                    </p>
+                </div>
+
+                <div class="auth-feature">
+                    <div class="auth-feature-title">Роли пользователей</div>
+                    <p class="auth-feature-text">
+                        Студенты проходят тесты, преподаватели создают их и анализируют результаты.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-card">
+            <div class="auth-card-title">Регистрация</div>
+            <div class="auth-card-subtitle">Создай новый аккаунт</div>
+
+            <div class="message-box">
+                {% for message in messages %}
+                    <div class="alert alert-info">{{ message }}</div>
+                {% endfor %}
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Имя</label>
+                    <input type="text" name="full_name" class="form-control" placeholder="Введите имя" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" placeholder="Введите email" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" name="password" class="form-control" placeholder="Введите пароль" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Повторите пароль</label>
+                    <input type="password" name="password2" class="form-control" placeholder="Повторите пароль" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Выберите роль</label>
+                    <select name="role" id="roleSelect" class="form-select">
+                        <option value="student">Студент</option>
+                        <option value="teacher">Преподаватель</option>
+                    </select>
+                </div>
+
+                <div class="mb-3" id="teacherSecretBlock" style="display: none;">
+                    <label class="form-label">Секретный код преподавателя</label>
+                    <input type="password" name="teacher_secret" class="form-control" placeholder="Введите код">
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">
+                    Зарегистрироваться
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const roleSelect = document.getElementById('roleSelect');
+const teacherSecretBlock = document.getElementById('teacherSecretBlock');
+
+function toggleTeacherSecret() {
+    teacherSecretBlock.style.display =
+        roleSelect.value === 'teacher' ? 'block' : 'none';
+}
+
+roleSelect.addEventListener('change', toggleTeacherSecret);
+toggleTeacherSecret();
+</script>
+
+{% endblock %}

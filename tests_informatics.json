@@ -1,0 +1,183 @@
+[
+  {
+    "model": "tests_app.test",
+    "pk": 2,
+    "fields": {
+      "title": "Информатика"
+    }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 101,
+    "fields": {
+      "test": 2,
+      "text": "Что изучает информатика?"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1001,
+    "fields": { "question": 101, "text": "Информационные процессы и технологии", "is_correct": true }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1002,
+    "fields": { "question": 101, "text": "Физические законы природы", "is_correct": false }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1003,
+    "fields": { "question": 101, "text": "Химические реакции", "is_correct": false }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1004,
+    "fields": { "question": 101, "text": "Биологические процессы", "is_correct": false }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 102,
+    "fields": {
+      "test": 2,
+      "text": "Какие информационные процессы существуют? (В вопросе два правильных варианта ответа)"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1005,
+    "fields": { "question": 102, "text": "Хранение информации", "is_correct": true }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1006,
+    "fields": { "question": 102, "text": "Передача информации", "is_correct": true }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1007,
+    "fields": { "question": 102, "text": "Рост растений", "is_correct": false }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1008,
+    "fields": { "question": 102, "text": "Испарение воды", "is_correct": false }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 103,
+    "fields": {
+      "test": 2,
+      "text": "Что относится к аппаратному обеспечению компьютера?"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1009,
+    "fields": { "question": 103, "text": "Процессор", "is_correct": true }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1010,
+    "fields": { "question": 103, "text": "Операционная система", "is_correct": false }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1011,
+    "fields": { "question": 103, "text": "Текстовый редактор", "is_correct": false }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1012,
+    "fields": { "question": 103, "text": "Антивирус", "is_correct": false }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 104,
+    "fields": {
+      "test": 2,
+      "text": "Какие устройства относятся к внешним? (В вопросе два правильных варианта ответа)"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1013,
+    "fields": { "question": 104, "text": "Принтер", "is_correct": true }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1014,
+    "fields": { "question": 104, "text": "Сканер", "is_correct": true }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1015,
+    "fields": { "question": 104, "text": "Процессор", "is_correct": false }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1016,
+    "fields": { "question": 104, "text": "Оперативная память", "is_correct": false }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 105,
+    "fields": {
+      "test": 2,
+      "text": "Что такое операционная система?"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1017,
+    "fields": { "question": 105, "text": "Программа управления ресурсами компьютера", "is_correct": true }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1018,
+    "fields": { "question": 105, "text": "Антивирусная утилита", "is_correct": false }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1019,
+    "fields": { "question": 105, "text": "Текстовый редактор", "is_correct": false }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1020,
+    "fields": { "question": 105, "text": "Архиватор", "is_correct": false }
+  },
+
+  {
+    "model": "tests_app.question",
+    "pk": 106,
+    "fields": {
+      "test": 2,
+      "text": "Какие функции выполняет операционная система? (В вопросе два правильных варианта ответа)"
+    }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1021,
+    "fields": { "question": 106, "text": "Управление файлами", "is_correct": true }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1022,
+    "fields": { "question": 106, "text": "Управление устройствами", "is_correct": true }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1023,
+    "fields": { "question": 106, "text": "Создание графики", "is_correct": false }
+  },
+  {
+    "model": "tests_app.answer",
+    "pk": 1024,
+    "fields": { "question": 106, "text": "Редактирование видео", "is_correct": false }
+  }
+]

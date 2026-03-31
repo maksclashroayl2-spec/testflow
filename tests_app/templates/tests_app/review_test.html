@@ -1,0 +1,206 @@
+{% extends "tests_app/base.html" %}
+{% block title %}Разбор теста{% endblock %}
+
+{% block content %}
+
+<style>
+.review-wrap {
+    max-width: 1100px;
+    margin: 30px auto 50px;
+}
+
+.review-header {
+    background: rgba(255,255,255,0.88);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 28px;
+    padding: 30px;
+    box-shadow: 0 14px 38px rgba(15, 23, 42, 0.06);
+    margin-bottom: 24px;
+}
+
+.review-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #0f172a;
+}
+
+.review-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.review-badge {
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    font-weight: 600;
+    font-size: 0.92rem;
+}
+
+.question-card {
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 14px 38px rgba(15, 23, 42, 0.06);
+    margin-bottom: 20px;
+}
+
+.question-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 18px;
+}
+
+.answer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.answer-item {
+    border-radius: 16px;
+    padding: 14px 16px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.answer-item.correct {
+    background: #dcfce7;
+    border-color: #86efac;
+}
+
+.answer-item.wrong-selected {
+    background: #fee2e2;
+    border-color: #fca5a5;
+}
+
+.answer-text {
+    color: #1f2937;
+    font-weight: 500;
+}
+
+.answer-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.label-badge {
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.label-correct {
+    background: #166534;
+    color: white;
+}
+
+.label-selected {
+    background: #1d4ed8;
+    color: white;
+}
+
+.label-wrong {
+    background: #dc2626;
+    color: white;
+}
+
+.back-btn {
+    margin-top: 10px;
+}
+
+.empty-box {
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 24px;
+    padding: 24px;
+    text-align: center;
+    color: #64748b;
+}
+
+@media (max-width: 768px) {
+    .review-title {
+        font-size: 1.6rem;
+    }
+
+    .answer-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+
+<div class="container review-wrap">
+
+    <div class="review-header">
+        <div class="review-title">{{ test.title }} — разбор</div>
+        <p class="mb-2 text-muted">
+            Здесь показаны правильные ответы и ответы, которые выбрал студент.
+        </p>
+
+        <div class="review-meta">
+            <div class="review-badge">Баллы: {{ result.score }}</div>
+            <div class="review-badge">Процент: {{ result.percent }}%</div>
+            <div class="review-badge">Оценка: {{ result.grade }}</div>
+        </div>
+    </div>
+
+    {% if review_data %}
+        {% for item in review_data %}
+            <div class="question-card">
+                <div class="question-title">
+                    {{ forloop.counter }}. {{ item.question_text }}
+                </div>
+
+                <div class="answer-list">
+                    {% for answer in item.answers %}
+                        <div class="answer-item {% if answer.is_correct %}correct{% endif %}{% if answer.is_selected and not answer.is_correct %} wrong-selected{% endif %}">
+                            <div class="answer-text">
+                                {{ answer.text }}
+                            </div>
+
+                            <div class="answer-labels">
+                                {% if answer.is_correct %}
+                                    <span class="label-badge label-correct">Правильный ответ</span>
+                                {% endif %}
+
+                                {% if answer.is_selected and answer.is_correct %}
+                                    <span class="label-badge label-selected">Ваш ответ</span>
+                                {% endif %}
+
+                                {% if answer.is_selected and not answer.is_correct %}
+                                    <span class="label-badge label-wrong">Ваш ответ</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-box">
+            Данные для разбора теста не найдены.
+        </div>
+    {% endif %}
+
+    <a href="{% url 'profile' %}" class="btn btn-secondary back-btn">
+        ← Назад в профиль
+    </a>
+
+</div>
+
+{% endblock %}

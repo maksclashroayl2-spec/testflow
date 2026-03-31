@@ -1,0 +1,209 @@
+{% extends "tests_app/base.html" %}
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+
+<style>
+.profile-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 32px;
+    padding: 48px 24px 36px;
+    background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.12), transparent 24%),
+        linear-gradient(135deg, rgba(255,255,255,0.9), rgba(245,249,255,0.94));
+    border: 1px solid rgba(226, 232, 240, 0.85);
+    box-shadow: 0 22px 60px rgba(15, 23, 42, 0.08);
+    text-align: center;
+}
+
+.avatar-upload {
+    position: relative;
+    width: 136px;
+    height: 136px;
+    margin: 0 auto 18px;
+}
+
+.avatar-upload img {
+    width: 136px;
+    height: 136px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    box-shadow: 0 14px 35px rgba(0,0,0,.15);
+}
+
+.avatar-plus {
+    position: absolute;
+    right: 6px;
+    bottom: 8px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: #fff;
+    font-size: 20px;
+    text-align: center;
+    line-height: 34px;
+    cursor: pointer;
+}
+
+.profile-name {
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+.profile-meta {
+    color: #64748b;
+}
+
+.stat-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+.section-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+}
+</style>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="profile-hero mb-4">
+
+        <div class="avatar-upload">
+            <form method="post" enctype="multipart/form-data" id="avatarForm">
+                {% csrf_token %}
+                <label style="cursor:pointer;">
+                    <img src="{{ profile.avatar.url }}">
+                    <div class="avatar-plus">+</div>
+                    <input type="file" name="avatar" id="avatarInput" hidden>
+                </label>
+            </form>
+        </div>
+
+        <!-- 🔥 ИМЯ -->
+        <div class="profile-name">
+            {{ profile.full_name|default:request.user.email }}
+        </div>
+
+        <div class="profile-meta">
+            {{ request.user.email }} · Зарегистрирован: {{ request.user.date_joined|date:"d.m.Y" }}
+        </div>
+
+        {% if profile.bio %}
+            <p>{{ profile.bio }}</p>
+        {% else %}
+            <p>Добавь немного информации о себе</p>
+        {% endif %}
+    </div>
+
+    <!-- СТАТИСТИКА -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <h3>{{ total_tests }}</h3>
+                <small>Тестов пройдено</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <h3>{{ avg_percent }}%</h3>
+                <small>Средний результат</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <h3>{{ best_result.grade|default:"—" }}</h3>
+                <small>Лучшая оценка</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <!-- ИСТОРИЯ -->
+        <div class="col-md-8">
+            <div class="section-card">
+                <h4>📊 История тестов</h4>
+
+                {% if results %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Тест</th>
+                            <th>Результат</th>
+                            <th>Процент</th>
+                            <th>Оценка</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in results %}
+                        <tr>
+                            <td>{{ r.test.title }}</td>
+                            <td>{{ r.score }}/{{ r.test.questions.count }}</td>
+                            <td>{{ r.percent }}%</td>
+                            <td>{{ r.grade }}</td>
+                            <td>
+                                <a href="{% url 'review_test' r.id %}" class="btn btn-sm btn-primary">
+                                    Ответы
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    <p>Вы ещё не проходили тесты</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- РЕДАКТИРОВАНИЕ -->
+        <div class="col-md-4">
+            <div class="section-card">
+                <h4>Редактирование профиля</h4>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- 🔥 ИМЯ -->
+                    <div class="mb-3">
+                        <label>Имя</label>
+                        <input type="text"
+                               name="full_name"
+                               class="form-control"
+                               value="{{ profile.full_name|default_if_none:'' }}">
+                    </div>
+
+                    <!-- BIO -->
+                    <div class="mb-3">
+                        <label>О себе</label>
+                        <textarea name="bio"
+                                  class="form-control">{{ profile.bio|default_if_none:'' }}</textarea>
+                    </div>
+
+                    <button class="btn btn-primary w-100">Сохранить</button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+document.getElementById("avatarInput").addEventListener("change", function () {
+    document.getElementById("avatarForm").submit();
+});
+</script>
+
+{% endblock %}

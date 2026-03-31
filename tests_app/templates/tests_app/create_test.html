@@ -1,0 +1,23 @@
+{% extends "tests_app/base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <h3>Создать тест</h3>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label>Название теста</label>
+            <input type="text" name="title" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Описание</label>
+            <textarea name="description" class="form-control"></textarea>
+        </div>
+
+        <button class="btn btn-success">Создать</button>
+    </form>
+</div>
+
+{% endblock %}

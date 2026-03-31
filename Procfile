@@ -1,0 +1,1 @@
+web: gunicorn diplom_project.wsgi:application

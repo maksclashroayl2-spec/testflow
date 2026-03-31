@@ -1,0 +1,33 @@
+{% extends 'tests_app/base.html' %}
+
+{% block title %}Редактирование профиля{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm p-4">
+        <h3 class="mb-4">✏ Редактирование профиля преподавателя</h3>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Фото</label>
+                <input type="file" name="avatar" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">О себе</label>
+                <textarea name="bio" class="form-control" rows="4">{{ profile.bio }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Сохранить изменения
+            </button>
+
+            <a href="{% url 'teacher_dashboard' %}" class="btn btn-secondary">
+                Назад
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}

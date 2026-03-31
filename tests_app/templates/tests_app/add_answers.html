@@ -1,0 +1,81 @@
+{% extends 'tests_app/base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h3 class="mb-4">Добавить ответы</h3>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="mb-0">{{ question.text }}</h5>
+        </div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Ответ 1</label>
+            <input type="text" name="answers" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ответ 2</label>
+            <input type="text" name="answers" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ответ 3</label>
+            <input type="text" name="answers" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ответ 4</label>
+            <input type="text" name="answers" class="form-control">
+        </div>
+
+        <hr class="my-4">
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Правильные ответы</label>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="correct" value="0" id="correct1">
+                <label class="form-check-label" for="correct1">
+                    Ответ 1
+                </label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="correct" value="1" id="correct2">
+                <label class="form-check-label" for="correct2">
+                    Ответ 2
+                </label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="correct" value="2" id="correct3">
+                <label class="form-check-label" for="correct3">
+                    Ответ 3
+                </label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="correct" value="3" id="correct4">
+                <label class="form-check-label" for="correct4">
+                    Ответ 4
+                </label>
+            </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-success mt-3">
+            Сохранить ответы
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

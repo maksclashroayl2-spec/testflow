@@ -1,0 +1,24 @@
+{% extends "tests_app/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Добавить вопрос</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Текст вопроса</label>
+            <input type="text" name="text" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            Добавить ответы
+        </button>
+
+        <a href="{% url 'edit_test' test.id %}" class="btn btn-secondary">
+            Назад
+        </a>
+    </form>
+</div>
+{% endblock %}

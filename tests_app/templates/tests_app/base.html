@@ -1,0 +1,440 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TestFlow{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #f4f7fb;
+            --bg-soft: #eef3f9;
+            --card-bg: rgba(255, 255, 255, 0.88);
+            --text-main: #1e293b;
+            --text-soft: #64748b;
+            --border-soft: rgba(148, 163, 184, 0.18);
+            --primary-main: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success-main: #16a34a;
+            --danger-main: #dc2626;
+            --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
+            --shadow-card: 0 16px 45px rgba(15, 23, 42, 0.08);
+            --radius-xl: 24px;
+            --radius-lg: 18px;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: var(--text-main);
+            background:
+                radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 30%),
+                radial-gradient(circle at top right, rgba(16, 185, 129, 0.08), transparent 25%),
+                linear-gradient(180deg, #f8fbff 0%, #f2f6fb 100%);
+            font-family: "Segoe UI", Inter, Arial, sans-serif;
+        }
+
+        main {
+            flex: 1;
+            padding-top: 42px;
+            padding-bottom: 48px;
+        }
+
+        .container {
+            max-width: 1280px;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            min-height: 82px;
+            padding: 0;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+        }
+
+        .navbar .container {
+            min-height: 82px;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .navbar-brand img {
+            height: 54px;
+            width: auto;
+            object-fit: contain;
+            transition: transform .25s ease, filter .25s ease;
+        }
+
+        .navbar-brand img:hover {
+            transform: scale(1.05);
+            filter: brightness(1.08);
+        }
+
+        .navbar-brand span {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+            transition: color .2s ease;
+        }
+
+        .navbar-brand:hover span {
+            color: var(--primary-main);
+        }
+
+        .navbar-nav {
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-main) !important;
+            padding: 10px 14px !important;
+            border-radius: 12px;
+            transition: all .2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-main) !important;
+            background: rgba(37, 99, 235, 0.08);
+        }
+
+        .nav-link.text-danger {
+            color: var(--danger-main) !important;
+        }
+
+        .nav-link.text-danger:hover {
+            background: rgba(220, 38, 38, 0.08);
+            color: #b91c1c !important;
+        }
+
+        .navbar-toggler {
+            border: none;
+            box-shadow: none !important;
+        }
+
+        /* ===== GLOBAL UI ===== */
+        .card {
+            border: 1px solid var(--border-soft);
+            border-radius: var(--radius-lg);
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-card);
+        }
+
+        .btn {
+            border-radius: 14px;
+            font-weight: 600;
+            padding: 10px 18px;
+            transition: all .2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            border: none;
+            box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            border: none;
+            box-shadow: 0 10px 22px rgba(22, 163, 74, 0.2);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-primary,
+        .btn-outline-secondary,
+        .btn-outline-danger,
+        .btn-outline-info {
+            border-radius: 12px;
+        }
+
+        .form-control,
+        .form-select,
+        textarea,
+        input {
+            border-radius: 14px !important;
+            border: 1px solid #dbe3ee !important;
+            padding: 12px 14px !important;
+            box-shadow: none !important;
+            transition: all .2s ease;
+        }
+
+        .form-control:focus,
+        .form-select:focus,
+        textarea:focus,
+        input:focus {
+            border-color: #93c5fd !important;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12) !important;
+        }
+
+        .alert {
+            border: none;
+            border-radius: 16px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .table {
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-main);
+        }
+
+        p, .text-muted, small {
+            color: var(--text-soft) !important;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            margin-top: auto;
+            background:
+                linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #dbe4ef;
+            padding: 44px 0 22px;
+            font-size: 14px;
+        }
+
+        footer h6 {
+            color: #ffffff;
+            margin-bottom: 14px;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .footer-text {
+            line-height: 1.7;
+            color: #cbd5e1 !important;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: #dbe4ef;
+            text-decoration: none;
+            transition: color .2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #93c5fd;
+        }
+
+        .footer-copy {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        footer hr {
+            border-color: rgba(255, 255, 255, 0.08);
+            margin: 22px 0 14px;
+        }
+
+        /* ===== HELPERS ===== */
+        .page-shell {
+            background: rgba(255, 255, 255, 0.38);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 30px;
+            padding: 26px;
+            box-shadow: 0 10px 35px rgba(15, 23, 42, 0.06);
+        }
+
+        @media (max-width: 991px) {
+            .navbar-brand span {
+                font-size: 1.5rem;
+            }
+
+            .navbar-collapse {
+                background: rgba(255, 255, 255, 0.96);
+                border-radius: 16px;
+                padding: 12px;
+                margin-top: 12px;
+                box-shadow: var(--shadow-soft);
+            }
+
+            main {
+                padding-top: 28px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-brand img {
+                height: 46px;
+            }
+
+            .navbar-brand span {
+                font-size: 1.35rem;
+            }
+
+            main {
+                padding-top: 20px;
+                padding-bottom: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'tests_app/img/logo.png' %}" alt="logo">
+            <span>TestFlow</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Переключить навигацию">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+
+                {% if user.is_authenticated %}
+
+                    {% if user.profile.role == 'teacher' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'teacher_dashboard' %}">
+                                Управление тестами
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'tests_list' %}">
+                            Тесты
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">
+                            Профиль
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="{% url 'logout' %}">
+                            Выйти
+                        </a>
+                    </li>
+
+                {% else %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">
+                            Вход
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">
+                            Регистрация
+                        </a>
+                    </li>
+
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="row text-start">
+
+            <div class="col-md-4 mb-3">
+                <h6>TestFlow</h6>
+                <p class="footer-text">
+                    Веб-платформа для онлайн-тестирования и анализа
+                    уровня знаний обучающихся.
+                </p>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <h6>Навигация</h6>
+                <ul class="footer-links">
+                    <li><a href="{% url 'home' %}">Главная</a></li>
+                    <li><a href="{% url 'tests_list' %}">Тесты</a></li>
+                    <li><a href="{% url 'profile' %}">Профиль</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <h6>Информация</h6>
+                <p class="footer-text mb-1">
+                    Система предназначена для проведения
+                    онлайн-тестирования и оценки знаний.
+                </p>
+                <p class="footer-text">
+                    Поддерживает хранение результатов и анализ успеваемости.
+                </p>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="text-center footer-copy">
+            © {% now "Y" %} TestFlow | Все права защищены
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

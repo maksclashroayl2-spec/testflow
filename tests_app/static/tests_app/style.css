@@ -1,0 +1,149 @@
+/* ===== ОСНОВНЫЕ СТИЛИ ===== */
+
+body {
+    background: #f4f6f9;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #212529;
+}
+
+h1, h2, h3, h4 {
+    font-weight: 600;
+}
+
+/* ===== КАРТОЧКИ ===== */
+
+.card {
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    border: none;
+}
+
+.test-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-footer {
+    margin-top: auto;
+}
+
+.card-footer .btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+}
+
+/* ===== КНОПКИ ===== */
+
+.btn {
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-size: 16px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border: none;
+}
+
+.btn-secondary {
+    background: #6b7280;
+    border: none;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border: none;
+}
+
+/* ===== ПРОФИЛЬ ===== */
+
+.profile-bg {
+    height: 220px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.profile-header {
+    margin-top: -80px;
+}
+
+.avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.avatar-img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #ffffff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+.avatar-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.5);
+    color: #ffffff;
+    font-size: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.avatar-wrapper:hover .avatar-overlay {
+    opacity: 1;
+}
+
+/* ===== NAVBAR ===== */
+
+.navbar {
+    height: 75px;
+    padding: 0;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.navbar .container {
+    height: 75px;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navbar-brand img {
+    height: 55px;
+    width: auto;
+    object-fit: contain;
+
+    /* Делает любой светлый логотип чёрным */
+    filter: brightness(0);
+
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand img:hover {
+    transform: scale(1.05);
+}
+
+.navbar-brand span {
+    font-size: 22px;
+    letter-spacing: 0.5px;
+    color: #111827;
+}

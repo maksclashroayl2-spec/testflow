@@ -1,0 +1,191 @@
+{% extends "tests_app/base.html" %}
+{% block title %}Тесты | TestFlow{% endblock %}
+
+{% block content %}
+
+<style>
+.tests-hero {
+    margin-bottom: 28px;
+    padding: 34px 30px;
+    border-radius: 28px;
+    background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 28%),
+        linear-gradient(135deg, rgba(255,255,255,0.9), rgba(246,250,255,0.92));
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.07);
+}
+
+.tests-hero h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.tests-hero p {
+    max-width: 760px;
+    margin-bottom: 0;
+    color: #64748b;
+    line-height: 1.7;
+}
+
+.test-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 24px;
+    padding: 26px;
+    box-shadow: 0 14px 38px rgba(15, 23, 42, 0.06);
+    transition: transform .22s ease, box-shadow .22s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.test-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.1);
+}
+
+.test-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(37, 99, 235, 0.08);
+    color: #1d4ed8;
+    font-size: .85rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.test-title {
+    font-size: 1.28rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.test-description {
+    color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 18px;
+    flex-grow: 1;
+}
+
+.test-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.test-meta-item {
+    background: #f8fafc;
+    color: #334155;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 9px 12px;
+    font-size: .92rem;
+    font-weight: 500;
+}
+
+.card-footer-clean {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid #eef2f7;
+}
+
+.empty-tests {
+    padding: 34px 28px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 12px 34px rgba(15, 23, 42, 0.06);
+    text-align: center;
+}
+
+.empty-tests h4 {
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.empty-tests p {
+    color: #64748b;
+    margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+    .tests-hero {
+        padding: 26px 20px;
+        border-radius: 22px;
+    }
+
+    .tests-hero h2 {
+        font-size: 1.65rem;
+    }
+}
+</style>
+
+<div class="container">
+
+    <div class="tests-hero">
+        <h2>📝 Доступные тесты</h2>
+        <p>
+            Выберите подходящий тест, ознакомьтесь с количеством вопросов и лимитом времени,
+            затем начните прохождение в удобном формате прямо на платформе.
+        </p>
+    </div>
+
+    {% if tests %}
+        <div class="row g-4">
+            {% for test in tests %}
+                <div class="col-md-6 col-xl-4 d-flex">
+                    <div class="test-card w-100">
+
+                        <div class="test-badge">Тестирование</div>
+
+                        <div class="test-title">
+                            {{ test.title }}
+                        </div>
+
+                        {% if test.description %}
+                            <div class="test-description">
+                                {{ test.description|truncatechars:120 }}
+                            </div>
+                        {% else %}
+                            <div class="test-description">
+                                К этому тесту пока не добавлено описание.
+                            </div>
+                        {% endif %}
+
+                        <div class="test-meta">
+                            <div class="test-meta-item">
+                                Вопросов: {{ test.questions.count }}
+                            </div>
+                            <div class="test-meta-item">
+                                Время: {{ test.time_limit }} мин.
+                            </div>
+                        </div>
+
+                        <div class="card-footer-clean">
+                            <a href="{% url 'start_test' test.id %}" class="btn btn-primary w-100">
+                                Начать тест
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-tests">
+            <h4>Тесты пока не добавлены</h4>
+            <p>Когда преподаватели создадут новые тесты, они появятся на этой странице.</p>
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}
