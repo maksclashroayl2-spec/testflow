@@ -4,188 +4,551 @@
 {% block content %}
 
 <style>
-.tests-hero {
-    margin-bottom: 28px;
-    padding: 34px 30px;
-    border-radius: 28px;
-    background:
-        radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 28%),
-        linear-gradient(135deg, rgba(255,255,255,0.9), rgba(246,250,255,0.92));
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.07);
+.tests-page {
+    display: grid;
+    gap: 24px;
+    padding-bottom: 40px;
 }
 
-.tests-hero h2 {
+.tests-header {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.tests-header h1 {
     font-size: 2rem;
-    font-weight: 800;
+    font-weight: 700;
     margin-bottom: 10px;
+    color: #0f172a;
+    letter-spacing: -0.02em;
 }
 
-.tests-hero p {
-    max-width: 760px;
-    margin-bottom: 0;
-    color: #64748b;
+.tests-header p {
+    color: #526887;
     line-height: 1.7;
+    margin: 0;
+    max-width: 760px;
+}
+
+.tests-summary {
+    min-width: 170px;
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.035);
+}
+
+.tests-summary-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+.tests-summary-label {
+    color: #526887;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* SEARCH */
+.tests-search {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.tests-search-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.tests-search input {
+    height: 46px;
+    border-radius: 8px;
+}
+
+.tests-search-note {
+    margin-top: 10px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.tests-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
 }
 
 .test-card {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    border-radius: 24px;
-    padding: 26px;
-    box-shadow: 0 14px 38px rgba(15, 23, 42, 0.06);
-    transition: transform .22s ease, box-shadow .22s ease;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 22px;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow: hidden;
+    min-height: 310px;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
 }
 
-.test-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.1);
-}
-
-.test-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: fit-content;
-    padding: 7px 12px;
-    border-radius: 999px;
-    background: rgba(37, 99, 235, 0.08);
-    color: #1d4ed8;
-    font-size: .85rem;
-    font-weight: 700;
+.test-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
     margin-bottom: 16px;
 }
 
+.test-type {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.test-time {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
 .test-title {
-    font-size: 1.28rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 10px;
+    line-height: 1.35;
+}
+
+.test-description {
+    color: #526887;
+    line-height: 1.65;
+    font-size: 15px;
+    margin-bottom: 18px;
+    flex: 1;
+}
+
+.test-status {
+    margin-bottom: 14px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+.test-status.available {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+}
+
+.test-status.unavailable {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+}
+
+.test-meta {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.test-meta-item {
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.test-meta-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.test-meta-label {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.test-date-box {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.test-date-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+}
+
+.test-date-row span {
+    color: #64748b;
+}
+
+.test-date-row strong {
+    color: #0f172a;
+    font-weight: 650;
+    text-align: right;
+}
+
+.test-action {
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+    margin-top: auto;
+}
+
+.empty-tests {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 34px;
+    text-align: center;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.empty-tests h4 {
+    font-size: 1.25rem;
     font-weight: 700;
     color: #0f172a;
     margin-bottom: 10px;
 }
 
-.test-description {
-    color: #64748b;
-    line-height: 1.7;
-    margin-bottom: 18px;
-    flex-grow: 1;
-}
-
-.test-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 18px;
-}
-
-.test-meta-item {
-    background: #f8fafc;
-    color: #334155;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 9px 12px;
-    font-size: .92rem;
-    font-weight: 500;
-}
-
-.card-footer-clean {
-    margin-top: auto;
-    padding-top: 14px;
-    border-top: 1px solid #eef2f7;
-}
-
-.empty-tests {
-    padding: 34px 28px;
-    border-radius: 22px;
-    background: rgba(255, 255, 255, 0.88);
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    box-shadow: 0 12px 34px rgba(15, 23, 42, 0.06);
-    text-align: center;
-}
-
-.empty-tests h4 {
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
 .empty-tests p {
     color: #64748b;
-    margin-bottom: 0;
+    margin-bottom: 18px;
+}
+
+.no-search-results {
+    display: none;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    color: #64748b;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.04);
+    backdrop-filter: blur(10px);
+}
+
+.no-search-results h4 {
+    color: #0f172a;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+@media (max-width: 1100px) {
+    .tests-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 768px) {
-    .tests-hero {
-        padding: 26px 20px;
-        border-radius: 22px;
+    .tests-header {
+        flex-direction: column;
     }
 
-    .tests-hero h2 {
+    .tests-summary {
+        width: 100%;
+    }
+
+    .tests-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .tests-header {
+        padding: 22px;
+    }
+
+    .tests-header h1 {
         font-size: 1.65rem;
+    }
+
+    .test-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .test-date-row {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .test-date-row strong {
+        text-align: left;
     }
 }
 </style>
 
-<div class="container">
+<div class="tests-page">
 
-    <div class="tests-hero">
-        <h2>📝 Доступные тесты</h2>
-        <p>
-            Выберите подходящий тест, ознакомьтесь с количеством вопросов и лимитом времени,
-            затем начните прохождение в удобном формате прямо на платформе.
-        </p>
-    </div>
+    <section class="tests-header">
+        <div>
+            <h1>Доступные тесты</h1>
+            <p>
+                На этой странице отображаются опубликованные тесты. Выберите нужный тест,
+                ознакомьтесь с количеством вопросов, лимитом времени, количеством попыток
+                и периодом доступности.
+            </p>
+        </div>
+
+        <div class="tests-summary">
+            <div class="tests-summary-value" id="visibleTestsCount">{{ tests|length }}</div>
+            <div class="tests-summary-label">тестов на странице</div>
+        </div>
+    </section>
+
+    <form method="get" class="tests-search d-grid gap-2" style="grid-template-columns: 1fr 180px 180px auto;">
+        <input type="text" name="q" class="form-control" value="{{ query }}" placeholder="Поиск по названию">
+        <select name="category" class="form-select">
+            <option value="">Все категории</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="status" class="form-select">
+            <option value="">Все статусы</option>
+            <option value="available" {% if status_filter == 'available' %}selected{% endif %}>Доступные</option>
+            <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Пройденные</option>
+            <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>На проверке</option>
+        </select>
+        <button class="btn btn-primary" type="submit">Применить</button>
+    </form>
 
     {% if tests %}
-        <div class="row g-4">
+        <section class="tests-search" style="display:none;">
+            <div class="tests-search-label">Поиск теста</div>
+
+            <input
+                type="text"
+                id="studentSearchInput"
+                class="form-control"
+                autocomplete="off"
+                placeholder="Начните вводить название теста">
+
+            <div class="tests-search-note">
+                Поиск работает по названию и описанию теста.
+            </div>
+        </section>
+
+        <section class="tests-grid" id="testsGrid">
             {% for test in tests %}
-                <div class="col-md-6 col-xl-4 d-flex">
-                    <div class="test-card w-100">
+                <article
+                    class="test-card student-test-card"
+                    data-search="{{ test.title|lower }} {{ test.description|default:''|lower }}">
 
-                        <div class="test-badge">Тестирование</div>
+                    <div class="test-card-top">
+                        <div class="test-type">{% if test.category %}{{ test.category.name }}{% else %}Тестирование{% endif %}</div>
 
-                        <div class="test-title">
-                            {{ test.title }}
+                        <div class="test-time">
+                            {% if test.time_limit %}
+                                {{ test.time_limit }} мин.
+                            {% else %}
+                                без лимита
+                            {% endif %}
                         </div>
-
-                        {% if test.description %}
-                            <div class="test-description">
-                                {{ test.description|truncatechars:120 }}
-                            </div>
-                        {% else %}
-                            <div class="test-description">
-                                К этому тесту пока не добавлено описание.
-                            </div>
-                        {% endif %}
-
-                        <div class="test-meta">
-                            <div class="test-meta-item">
-                                Вопросов: {{ test.questions.count }}
-                            </div>
-                            <div class="test-meta-item">
-                                Время: {{ test.time_limit }} мин.
-                            </div>
-                        </div>
-
-                        <div class="card-footer-clean">
-                            <a href="{% url 'start_test' test.id %}" class="btn btn-primary w-100">
-                                Начать тест
-                            </a>
-                        </div>
-
                     </div>
-                </div>
+
+                    <h2 class="test-title">
+                        {{ test.title }}
+                    </h2>
+
+                    <div class="test-description">
+                        {% if test.description %}
+                            {{ test.description|truncatechars:130 }}
+                        {% else %}
+                            Описание теста не добавлено. Перед началом прохождения внимательно ознакомьтесь с вопросами.
+                        {% endif %}
+                    </div>
+
+                    {% if test.last_result %}
+                        <div class="test-status {% if test.last_result.grading_status == 'pending_review' %}unavailable{% else %}available{% endif %}">
+                            {% if test.last_result.grading_status == 'pending_review' %}
+                                Пройден — ожидает проверки ({{ test.last_result.percent }}%)
+                            {% else %}
+                                Пройден: {{ test.last_result.percent }}% · оценка {{ test.last_result.grade }}
+                            {% endif %}
+                        </div>
+                    {% elif test.is_available_by_date %}
+                        <div class="test-status available">
+                            Доступен для прохождения.
+                        </div>
+                    {% else %}
+                        <div class="test-status unavailable">
+                            {{ test.availability_message }}
+                        </div>
+                    {% endif %}
+
+                    <div class="test-meta">
+                        <div class="test-meta-item">
+                            <div class="test-meta-value">{{ test.questions_count }}</div>
+                            <div class="test-meta-label">вопросов</div>
+                        </div>
+
+                        <div class="test-meta-item">
+                            <div class="test-meta-value">
+                                {% if test.time_limit %}
+                                    {{ test.time_limit }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </div>
+                            <div class="test-meta-label">минут</div>
+                        </div>
+                    </div>
+
+                    <div class="test-date-box">
+                        <div class="test-date-row">
+                            <span>Доступен с</span>
+                            <strong>
+                                {% if test.available_from %}
+                                    {{ test.available_from|date:"d.m.Y H:i" }}
+                                {% else %}
+                                    сразу
+                                {% endif %}
+                            </strong>
+                        </div>
+
+                        <div class="test-date-row">
+                            <span>Доступен до</span>
+                            <strong>
+                                {% if test.available_until %}
+                                    {{ test.available_until|date:"d.m.Y H:i" }}
+                                {% else %}
+                                    без ограничения
+                                {% endif %}
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="test-action">
+                        {% if user.is_authenticated %}
+                            {% if test.is_available_by_date %}
+                                <a href="{% url 'test_detail' test.id %}" class="btn btn-primary w-100">
+                                    Подробнее
+                                </a>
+                            {% else %}
+                                <a href="{% url 'test_detail' test.id %}" class="btn btn-outline-secondary w-100">
+                                    Посмотреть информацию
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'login' %}?next={% url 'test_detail' test.id %}" class="btn btn-primary w-100">
+                                Войти, чтобы открыть
+                            </a>
+                        {% endif %}
+                    </div>
+
+                </article>
             {% endfor %}
-        </div>
+        </section>
+
+        {% if page_obj.has_other_pages %}
+        <nav class="d-flex gap-2 justify-content-center">
+            {% if page_obj.has_previous %}
+                <a class="btn btn-sm btn-outline-secondary" href="?page={{ page_obj.previous_page_number }}&q={{ query }}&category={{ selected_category }}&status={{ status_filter }}">Назад</a>
+            {% endif %}
+            <span class="align-self-center text-muted">Стр. {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a class="btn btn-sm btn-outline-secondary" href="?page={{ page_obj.next_page_number }}&q={{ query }}&category={{ selected_category }}&status={{ status_filter }}">Вперёд</a>
+            {% endif %}
+        </nav>
+        {% endif %}
+
+        <section class="no-search-results" id="noSearchResults">
+            <h4>Тесты не найдены</h4>
+            <p>
+                Попробуйте изменить запрос или введите другое название дисциплины.
+            </p>
+        </section>
     {% else %}
-        <div class="empty-tests">
+        <section class="empty-tests">
             <h4>Тесты пока не добавлены</h4>
-            <p>Когда преподаватели создадут новые тесты, они появятся на этой странице.</p>
-        </div>
+            <p>
+                Когда преподаватель создаст и опубликует тесты, они появятся на этой странице.
+            </p>
+
+            {% if user.is_authenticated and user.profile.role == 'teacher' %}
+                <a href="{% url 'create_test' %}" class="btn btn-primary">
+                    Создать первый тест
+                </a>
+            {% endif %}
+        </section>
     {% endif %}
 
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("studentSearchInput");
+    const cards = document.querySelectorAll(".student-test-card");
+    const noResults = document.getElementById("noSearchResults");
+    const visibleCount = document.getElementById("visibleTestsCount");
+
+    if (!searchInput) return;
+
+    searchInput.addEventListener("input", function () {
+        const query = searchInput.value.trim().toLowerCase();
+        let count = 0;
+
+        cards.forEach(function (card) {
+            const text = card.dataset.search || "";
+
+            if (text.includes(query)) {
+                card.style.display = "";
+                count++;
+            } else {
+                card.style.display = "none";
+            }
+        });
+
+        if (visibleCount) {
+            visibleCount.textContent = count;
+        }
+
+        if (noResults) {
+            noResults.style.display = count === 0 ? "block" : "none";
+        }
+    });
+});
+</script>
 
 {% endblock %}

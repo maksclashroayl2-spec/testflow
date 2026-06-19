@@ -1,125 +1,598 @@
 {% extends "tests_app/base.html" %}
-{% block title %}{{ test.title }}{% endblock %}
+{% block title %}{{ test.title }} | TestFlow{% endblock %}
 
 {% block content %}
+
 <style>
-.exam-card {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 30px;
-    border-radius: 16px;
+.exam-page {
+    max-width: 980px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+}
+
+.exam-header {
     background: #ffffff;
-    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 24px 26px;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 20px;
+    align-items: start;
 }
 
 .exam-title {
-    font-size: 22px;
-    font-weight: 600;
-    text-align: center;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 10px;
+    line-height: 1.2;
 }
 
-.exam-progress {
+.exam-subtitle {
+    color: #64748b;
+    line-height: 1.7;
+    margin: 0;
+    max-width: 620px;
+}
+
+.exam-summary {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 18px;
+}
+
+.exam-summary-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 12px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
     font-size: 14px;
-    color: #6c757d;
-    text-align: center;
-    margin-bottom: 20px;
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.summary-row span {
+    color: #64748b;
+}
+
+.summary-row strong {
+    color: #0f172a;
+    text-align: right;
+}
+
+.timer-card {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 18px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+}
+
+.timer-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #64748b;
+}
+
+.timer-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #b45309;
+    line-height: 1;
+}
+
+.progress-card {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 22px 24px;
+}
+
+.progress-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.progress-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.progress-count {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.progress-line {
+    width: 100%;
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #1d4ed8;
+    border-radius: 999px;
+}
+
+.question-card {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 28px;
+}
+
+.question-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.question-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.5;
+    margin-bottom: 22px;
+}
+
+.question-image-wrap {
+    margin: 0 0 22px;
+    border: 1px solid #dbe2ea;
+    border-radius: 12px;
+    background: #f8fafc;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.question-image {
+    display: block;
+    width: 70%;
+    max-width: 720px;
+    max-height: 520px;
+    border-radius: 10px;
+    object-fit: contain;
+}
+
+.answer-list {
+    display: grid;
+    gap: 12px;
 }
 
 .answer-item {
-    border: 2px solid #e9ecef;
-    border-radius: 12px;
+    display: block;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
     padding: 14px 16px;
-    margin-bottom: 12px;
+    background: #f8fafc;
+    transition: .15s ease;
     cursor: pointer;
-    transition: all .2s;
 }
 
 .answer-item:hover {
-    border-color: #0d6efd;
-    background: #f8f9ff;
+    border-color: #1d4ed8;
+    background: #eff6ff;
 }
 
 .answer-item input {
     margin-right: 10px;
-    transform: scale(1.2);
+    transform: translateY(1px);
+}
+
+.answer-text {
+    color: #334155;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.text-answer-box label {
+    display: block;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.text-answer-box textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.question-note {
+    margin-top: 10px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
 }
 
 .exam-actions {
     display: flex;
     justify-content: space-between;
-    margin-top: 25px;
+    align-items: center;
+    gap: 14px;
+    margin-top: 24px;
+    flex-wrap: wrap;
 }
 
-.timer-box {
-    max-width: 800px;
-    margin: 20px auto 0;
+.exam-actions-right {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.question-nav {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 20px 24px;
+}
+
+.question-nav-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 12px;
+}
+
+.question-nav-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.question-nav-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid #e5e7eb;
+    background: #f8fafc;
+    color: #64748b;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: .15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.question-nav-btn:hover {
+    border-color: #1d4ed8;
+    color: #1d4ed8;
+    background: #eff6ff;
+}
+
+.question-nav-btn.current {
+    border-color: #1d4ed8;
+    background: #1d4ed8;
+    color: #ffffff;
+}
+
+.question-nav-btn.answered {
+    background: #dcfce7;
+    border-color: #16a34a;
+    color: #166534;
+}
+
+.question-nav-btn.answered.current {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+    color: #ffffff;
+}
+
+.nav-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.nav-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.nav-legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    border: 2px solid #e5e7eb;
+    background: #f8fafc;
+}
+
+.nav-legend-dot.current {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+.nav-legend-dot.answered {
+    background: #dcfce7;
+    border-color: #16a34a;
+}
+
+@media (max-width: 900px) {
+    .exam-header {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .exam-header,
+    .timer-card,
+    .progress-card,
+    .question-card {
+        padding: 20px;
+    }
+
+    .exam-title {
+        font-size: 1.55rem;
+    }
+
+    .question-text {
+        font-size: 1.1rem;
+    }
+
+    .exam-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .exam-actions-right {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .exam-actions .btn,
+    .exam-actions-right .btn {
+        width: 100%;
+    }
 }
 </style>
 
-<div class="timer-box">
-    <div class="alert alert-warning text-center fw-bold">
-        Осталось времени: <span id="timer">--:--</span>
-    </div>
-</div>
+<div class="exam-page">
 
-<div class="exam-card">
-
-    <div class="exam-title">{{ test.title }}</div>
-    <div class="exam-progress">
-        Вопрос {{ index }} из {{ total }}
-    </div>
-
-    <hr>
-
-    <h5 class="mb-4">{{ question.text }}</h5>
-
-    <form method="post">
-        {% csrf_token %}
-
-        {% for a in answers %}
-        <label class="answer-item d-block">
-            {% if is_multiple %}
-                <input
-                    type="checkbox"
-                    name="answers"
-                    value="{{ a.id }}"
-                    {% if a.id|stringformat:"s" in selected_answers %}checked{% endif %}
-                >
-            {% else %}
-                <input
-                    type="radio"
-                    name="answers"
-                    value="{{ a.id }}"
-                    {% if a.id|stringformat:"s" in selected_answers %}checked{% endif %}
-                >
-            {% endif %}
-            {{ a.text }}
-        </label>
-        {% endfor %}
-
-        <div class="exam-actions">
-            {% if index > 1 %}
-                <button type="submit" name="action" value="back" class="btn btn-outline-secondary">
-                    ← Назад
-                </button>
-            {% else %}
-                <div></div>
-            {% endif %}
-
-            <button type="submit" name="action" value="next" class="btn btn-primary">
-                {% if index == total %}Завершить тест{% else %}Далее →{% endif %}
-            </button>
+    <section class="exam-header">
+        <div>
+            <h1 class="exam-title">{{ test.title }}</h1>
+            <p class="exam-subtitle">
+                Выполните задание, выберите правильный ответ или введите текстовый ответ,
+                затем перейдите к следующему вопросу.
+            </p>
         </div>
-    </form>
+
+        <div class="exam-summary">
+            <div class="exam-summary-title">Информация о тесте</div>
+
+            <div class="summary-row">
+                <span>Текущий вопрос</span>
+                <strong>{{ index }} из {{ total }}</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Тип задания</span>
+                <strong>
+                    {% if question.question_type == 'text' %}
+                        Текстовый ответ
+                    {% else %}
+                        Выбор ответа
+                    {% endif %}
+                </strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Формат ответа</span>
+                <strong>
+                    {% if question.question_type == 'text' %}
+                        Ввод текста
+                    {% else %}
+                        {% if is_multiple %}
+                            Несколько вариантов
+                        {% else %}
+                            Один вариант
+                        {% endif %}
+                    {% endif %}
+                </strong>
+            </div>
+        </div>
+    </section>
+
+    <section class="timer-card">
+        <div class="timer-label">Оставшееся время</div>
+        <div class="timer-value" id="timer">--:--</div>
+    </section>
+
+    <section class="progress-card">
+        <div class="progress-top">
+            <div class="progress-title">Прогресс прохождения теста</div>
+            <div class="progress-count">{{ index }} / {{ total }}</div>
+        </div>
+
+        {% widthratio index total 100 as progress_percent %}
+
+        <div class="progress-line">
+            <div class="progress-fill" style="width: {{ progress_percent }}%;"></div>
+        </div>
+    </section>
+
+    <section class="question-nav" style="position:relative; z-index:1;">
+        <div class="question-nav-title">Навигация по вопросам</div>
+        <div class="question-nav-grid">
+            {% for qid in question_ids %}
+                <form method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="goto">
+                    <input type="hidden" name="target" value="{{ forloop.counter0 }}">
+                    <button type="submit" class="question-nav-btn {% if qid|stringformat:'s' == current_question_id %}current{% elif qid|stringformat:'s' in answered_ids %}answered{% endif %}">
+                        {{ forloop.counter }}
+                    </button>
+                </form>
+            {% endfor %}
+        </div>
+        <div class="nav-legend">
+            <div class="nav-legend-item"><div class="nav-legend-dot current"></div> Текущий</div>
+            <div class="nav-legend-item"><div class="nav-legend-dot answered"></div> Отвечен</div>
+            <div class="nav-legend-item"><div class="nav-legend-dot"></div> Не отвечен</div>
+        </div>
+    </section>
+
+    <section class="question-card">
+        <div class="question-badge">
+            {% if question.question_type == 'text' %}
+                Текстовый ответ
+            {% else %}
+                {% if is_multiple %}
+                    Несколько правильных ответов
+                {% else %}
+                    Один правильный ответ
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div class="question-text">
+            {{ question.text }}
+        </div>
+            {% if question.image %}
+        <div class="question-image-wrap">
+            <img src="{{ question.image.url }}" alt="Изображение к вопросу" class="question-image">
+        </div>
+            {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% if question.question_type == 'text' %}
+                <div class="text-answer-box">
+                    <label for="text_answer">Введите ваш ответ</label>
+                    <textarea
+                        id="text_answer"
+                        name="text_answer"
+                        class="form-control"
+                        placeholder="Напишите ответ здесь...">{{ selected_text_answer }}</textarea>
+
+                    <div class="question-note">
+                        Введите ответ в текстовом виде, затем нажмите кнопку перехода к следующему вопросу.
+                    </div>
+                </div>
+            {% else %}
+                <div class="answer-list">
+                    {% for a in answers %}
+                        <label class="answer-item">
+                            {% if is_multiple %}
+                                <input
+                                    type="checkbox"
+                                    name="answers"
+                                    value="{{ a.id }}"
+                                    {% if a.id|stringformat:"s" in selected_answers %}checked{% endif %}
+                                >
+                            {% else %}
+                                <input
+                                    type="radio"
+                                    name="answers"
+                                    value="{{ a.id }}"
+                                    {% if a.id|stringformat:"s" in selected_answers %}checked{% endif %}
+                                >
+                            {% endif %}
+
+                            <span class="answer-text">{{ a.text }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+
+                <div class="question-note">
+                    {% if is_multiple %}
+                        Выберите один или несколько подходящих вариантов ответа.
+                    {% else %}
+                        Выберите один вариант ответа.
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <div class="exam-actions">
+                <div>
+                    {% if index > 1 %}
+                        <button type="submit" name="action" value="back" class="btn btn-outline-secondary">
+                            Назад
+                        </button>
+                    {% endif %}
+                </div>
+
+                <div class="exam-actions-right">
+                    {% if index == total %}
+                        <button type="button" class="btn btn-primary" onclick="confirmFinish()">
+                            Завершить тест
+                        </button>
+                    {% else %}
+                        <button type="submit" name="action" value="next" class="btn btn-primary">
+                            Далее
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </section>
 
 </div>
+
+<form method="post" id="finishForm" style="display:none;">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="next">
+</form>
+
+<script>
+    function confirmFinish() {
+        var unanswered = {{ total }} - {{ answered_ids|length }};
+        var msg = "Вы ответили на {{ answered_ids|length }} из {{ total }} вопросов.\n\n";
+        if (unanswered > 0) {
+            msg += "⚠️ У вас остались " + unanswered + " неотвеченных вопросов!\n\n";
+            msg += "Вы уверены что хотите завершить тест?";
+        } else {
+            msg += "✓ Вы ответили на все вопросы.\n\nОтправить ответы?";
+        }
+        if (confirm(msg)) {
+            document.getElementById('finishForm').submit();
+        }
+    }
+</script>
 
 <script>
     let remainingSeconds = Number("{{ remaining_seconds|default:'0' }}");
 
     function updateTimer() {
         const timerElement = document.getElementById('timer');
-
         if (!timerElement) return;
 
         if (remainingSeconds <= 0) {
@@ -140,4 +613,5 @@
     updateTimer();
     setInterval(updateTimer, 1000);
 </script>
+
 {% endblock %}

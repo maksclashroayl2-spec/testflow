@@ -1,155 +1,328 @@
 {% extends 'tests_app/base.html' %}
-
-{% block title %}Кабинет преподавателя{% endblock %}
+{% block title %}Кабинет преподавателя | TestFlow{% endblock %}
 
 {% block content %}
+<style>
+.dashboard-page { max-width: 1180px; margin: 0 auto; display: grid; gap: 20px; }
+.page-card { background: #fff; border: 1px solid #dbe2ea; border-radius: 10px; padding: 28px; }
+.stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+.stat-card { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 10px; padding: 18px; }
+.stat-value { font-size: 1.7rem; font-weight: 800; color: #0f172a; }
+.stat-label { color: #64748b; font-size: 13px; font-weight: 700; }
+.chart-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+.bar-row { display: grid; grid-template-columns: 120px 1fr 48px; gap: 10px; align-items: center; margin-bottom: 10px; }
+.bar-track { height: 10px; background: #e5e7eb; border-radius: 999px; overflow: hidden; }
+.bar-fill { height: 100%; background: linear-gradient(90deg, #1d4ed8, #60a5fa); }
+.grade-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.grade-card { text-align: center; padding: 14px; border-radius: 10px; background: #f8fafc; border: 1px solid #e5e7eb; }
+.list-item { padding: 12px 0; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; gap: 12px; }
+.list-item:last-child { border-bottom: none; }
 
-<div class="container mt-5">
+.checkbox-cell { width: 40px; }
 
-    <div class="row g-4">
+.scroll-card { max-height: 380px; overflow-y: auto; }
+.activity-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.activity-bar-block { width: 100%; border-radius: 4px 4px 0 0; background: linear-gradient(180deg, #1d4ed8, #60a5fa); min-height: 2px; transition: height 0.3s; }
+.activity-bar-label { font-size: 11px; color: #64748b; }
 
-        <!-- ===== ПРОФИЛЬ ПРЕПОДАВАТЕЛЯ ===== -->
-        <div class="col-lg-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body text-center p-4">
+.login-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+.login-item:last-child { border-bottom: none; }
 
-                    <img src="{{ user.profile.avatar.url }}"
-                         class="rounded-circle mb-3 border"
-                         width="130"
-                         height="130"
-                         style="object-fit: cover;">
+.deadline-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+.deadline-item:last-child { border-bottom: none; }
+.deadline-badge { background: #fef3c7; color: #92400e; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; }
 
-                    <h4 class="fw-bold">{{ user.username }}</h4>
-                    <p class="text-muted mb-2">Преподаватель</p>
+.notification-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: inline-block; margin-left: 6px; }
 
-                    {% if user.profile.bio %}
-                        <p class="small">{{ user.profile.bio }}</p>
-                    {% else %}
-                        <p class="text-muted small">
-                            Информация о преподавателе пока не заполнена.
-                        </p>
+.template-card { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+.template-card:last-child { border-bottom: none; }
+
+.log-item { padding: 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+.log-item:last-child { border-bottom: none; }
+.log-time { color: #94a3b8; font-size: 12px; }
+
+.checkbox-cell { width: 40px; }
+
+.scroll-card { max-height: 380px; overflow-y: auto; }
+.scroll-card::-webkit-scrollbar { width: 6px; }
+.scroll-card::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+.scroll-card::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+.scroll-card::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+@media (max-width: 992px) { .stats-grid, .chart-grid, .grade-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 576px) { .stats-grid, .chart-grid, .grade-grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .teacher-search-row { grid-template-columns: 1fr; } .teacher-search-row .btn { width: 100%; } .bulk-bar { flex-direction: column; } }
+</style>
+
+<div class="dashboard-page">
+    <section class="page-card">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="h3 fw-bold mb-2">Кабинет преподавателя
+                    {% if unread_count %}
+                        <span class="notification-dot"></span>
                     {% endif %}
-
-                    <a href="{% url 'edit_teacher_profile' %}" class="btn btn-outline-primary btn-sm mt-2">
-                        Редактировать профиль
-                    </a>
-                </div>
+                </h1>
+                <p class="text-muted mb-0">Аналитика, тесты, студенты и проверка результатов.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'create_test' %}" class="btn btn-primary">+ Создать тест</a>
+                <a href="{% url 'export_all_results' %}" class="btn btn-outline-secondary">Экспорт CSV</a>
             </div>
         </div>
+    </section>
 
-        <!-- ===== МОИ ТЕСТЫ ===== -->
-        <div class="col-lg-8">
+    <section class="page-card">
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-value">{{ total_tests }}</div><div class="stat-label">Всего тестов</div></div>
+            <div class="stat-card"><div class="stat-value">{{ active_tests }}</div><div class="stat-label">Активных</div></div>
+            <div class="stat-card"><div class="stat-value">{{ total_students }}</div><div class="stat-label">Студентов</div></div>
+            <div class="stat-card"><div class="stat-value">{{ total_attempts }}</div><div class="stat-label">Прохождений</div></div>
+            <div class="stat-card"><div class="stat-value">{{ pending_reviews }}</div><div class="stat-label">На проверке</div></div>
+        </div>
+    </section>
 
-            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-                <h3 class="fw-bold mb-0">📚 Мои тесты</h3>
-
-                <button class="btn btn-success px-4" data-bs-toggle="modal" data-bs-target="#createTestModal">
-                    + Создать тест
-                </button>
-            </div>
-
-            {% if tests %}
-                <div class="row">
-                    {% for test in tests %}
-                        <div class="col-md-6 mb-4">
-                            <div class="card shadow-sm h-100 border-0">
-                                <div class="card-body d-flex flex-column p-4">
-
-                                    <h5 class="fw-bold mb-2">{{ test.title }}</h5>
-
-                                    <p class="text-muted small mb-2">
-                                        Создан: {{ test.created_at|date:"d.m.Y" }}
-                                    </p>
-
-                                    <p class="text-muted small mb-3">
-                                        Время: {{ test.time_limit }} мин.
-                                    </p>
-
-                                    {% if test.description %}
-                                        <p class="small flex-grow-1">
-                                            {{ test.description|truncatechars:100 }}
-                                        </p>
-                                    {% else %}
-                                        <p class="small text-muted flex-grow-1">
-                                            Описание отсутствует.
-                                        </p>
-                                    {% endif %}
-
-                                    <div class="mt-auto pt-3 border-top d-flex flex-wrap gap-2">
-                                        <a href="{% url 'edit_test' test.id %}"
-                                           class="btn btn-sm btn-outline-primary">
-                                            Редактировать
-                                        </a>
-
-                                        <a href="{% url 'test_results' test.id %}"
-                                           class="btn btn-sm btn-outline-info">
-                                            Результаты
-                                        </a>
-
-                                        <a href="{% url 'delete_test' test.id %}"
-                                           class="btn btn-sm btn-outline-danger"
-                                           onclick="return confirm('Удалить тест?')">
-                                            Удалить
-                                        </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
+    <section class="chart-grid">
+        <div class="page-card">
+            <h2 class="h5 fw-bold mb-3">Средний балл по тестам</h2>
+            {% for item in test_chart %}
+                <div class="bar-row">
+                    <span class="small text-muted">{{ item.title }}</span>
+                    <div class="bar-track"><div class="bar-fill" style="width: {{ item.avg }}%;"></div></div>
+                    <strong>{{ item.avg }}%</strong>
                 </div>
-
-            {% else %}
-                <div class="alert alert-info shadow-sm border-0">
-                    У вас пока нет созданных тестов.
-                </div>
-            {% endif %}
-
+            {% empty %}
+                <p class="text-muted mb-0">Нет данных для графика.</p>
+            {% endfor %}
         </div>
 
-    </div>
-</div>
-
-<!-- ===== МОДАЛЬНОЕ ОКНО СОЗДАНИЯ ТЕСТА ===== -->
-<div class="modal fade" id="createTestModal" tabindex="-1" aria-labelledby="createTestModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold" id="createTestModalLabel">Создание теста</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        <div class="page-card">
+            <h2 class="h5 fw-bold mb-3">Распределение оценок</h2>
+            <div class="grade-grid">
+                <div class="grade-card"><div class="stat-value">{{ grade_stats.5 }}</div><div class="stat-label">Оценка 5</div></div>
+                <div class="grade-card"><div class="stat-value">{{ grade_stats.4 }}</div><div class="stat-label">Оценка 4</div></div>
+                <div class="grade-card"><div class="stat-value">{{ grade_stats.3 }}</div><div class="stat-label">Оценка 3</div></div>
+                <div class="grade-card"><div class="stat-value">{{ grade_stats.2 }}</div><div class="stat-label">Оценка 2</div></div>
             </div>
+            <p class="text-muted mt-3 mb-0">Средний процент: <strong>{{ avg_percent }}%</strong></p>
+        </div>
+    </section>
 
-            <form method="POST">
-                <div class="modal-body">
+    <section class="chart-grid">
+        <div class="page-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-bold mb-0">Активность за неделю</h2>
+            </div>
+            <div class="activity-bar">
+                {% for day in activity_chart %}
+                    <div class="activity-bar-col">
+                        <div class="activity-bar-block" style="height: {% if day.count %}{{ day.count|floatformat:0 }}{% else %}2{% endif %}0%;"></div>
+                        <div class="activity-bar-label">{{ day.date }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            <p class="text-muted mt-2 mb-0 small">Прохождений тестов по дням</p>
+        </div>
+
+        <div class="page-card">
+            <h2 class="h5 fw-bold mb-3">Сравнение групп</h2>
+            {% for g in group_comparison %}
+                <div class="bar-row">
+                    <span class="small text-muted">{{ g.name }}</span>
+                    <div class="bar-track"><div class="bar-fill" style="width: {{ g.avg }}%;"></div></div>
+                    <strong>{{ g.avg }}%</strong>
+                </div>
+            {% empty %}
+                <p class="text-muted mb-0">Групп пока нет.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="chart-grid">
+        <div class="page-card scroll-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-bold mb-0">Последние результаты</h2>
+                <a href="{% url 'teacher_students' %}" class="btn btn-sm btn-outline-primary">Студенты</a>
+            </div>
+            {% for result in recent_results %}
+                <div class="list-item">
+                    <div>
+                        <div class="fw-bold">{{ result.student.profile.full_name|default:result.student.email }}</div>
+                        <div class="text-muted small">{{ result.test.title }}</div>
+                    </div>
+                    <div class="text-end">
+                        <div class="fw-bold">{{ result.percent }}% · {{ result.grade }}</div>
+                        {% if result.grading_status == 'pending_review' %}
+                            <a href="{% url 'teacher_review_result' result.id %}" class="small">Проверить</a>
+                        {% else %}
+                            <a href="{% url 'teacher_review_result' result.id %}" class="small text-muted">Разбор</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted mb-0">Результатов пока нет.</p>
+            {% endfor %}
+        </div>
+
+        <div class="page-card scroll-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-bold mb-0">Топ студентов</h2>
+                <a href="{% url 'teacher_students' %}" class="btn btn-sm btn-outline-primary">Все</a>
+            </div>
+            {% for s in top_students %}
+                <div class="list-item">
+                    <div>
+                        <div class="fw-bold">{{ s.name }}</div>
+                        <div class="text-muted small">{{ s.group }} · {{ s.attempts }} попыток</div>
+                    </div>
+                    <strong class="text-primary">{{ s.avg_percent }}%</strong>
+                </div>
+            {% empty %}
+                <p class="text-muted mb-0">Студентов пока нет.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="chart-grid">
+        <div class="page-card scroll-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-bold mb-0">Последние входы</h2>
+            </div>
+            {% for u in recent_logins %}
+                <div class="login-item">
+                    <div>
+                        <span class="fw-bold">{{ u.profile.full_name|default:u.email }}</span>
+                    </div>
+                    <span class="text-muted small">{{ u.last_login|date:"d.m.Y H:i" }}</span>
+                </div>
+            {% empty %}
+                <p class="text-muted mb-0">Нет данных о входах.</p>
+            {% endfor %}
+        </div>
+
+        <div class="page-card scroll-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-bold mb-0">Дедлайны (7 дней)</h2>
+            </div>
+            {% for t in upcoming_deadlines %}
+                <div class="deadline-item">
+                    <div>
+                        <div class="fw-bold">{{ t.title }}</div>
+                        <div class="text-muted small">до {{ t.available_until|date:"d.m.Y H:i" }}</div>
+                    </div>
+                    <span class="deadline-badge">скоро</span>
+                </div>
+            {% empty %}
+                <p class="text-muted mb-0">Ближайших дедлайнов нет.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="chart-grid">
+        <div class="page-card scroll-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-bold mb-0">Уведомления
+                    {% if unread_count %}<span class="badge bg-danger ms-1">{{ unread_count }}</span>{% endif %}
+                </h2>
+                {% if unread_count %}
+                <form method="post" action="{% url 'mark_notifications_read' %}">
                     {% csrf_token %}
-
-                    <div class="mb-3">
-                        <label class="form-label">Название теста</label>
-                        <input type="text" name="title" class="form-control" required>
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Прочитать все</button>
+                </form>
+                {% endif %}
+            </div>
+            {% for n in notifications %}
+                <div class="list-item">
+                    <div>
+                        <div class="fw-bold">{{ n.title }}</div>
+                        <div class="text-muted small">{{ n.message }}</div>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Описание</label>
-                        <textarea name="description" class="form-control" rows="3"></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Время на тест (в минутах)</label>
-                        <input type="number" name="time_limit" class="form-control" min="1" value="10" required>
-                    </div>
+                    <span class="text-muted small">{{ n.created_at|date:"d.m H:i" }}</span>
                 </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Отмена
-                    </button>
-                    <button type="submit" class="btn btn-success">
-                        Создать тест
-                    </button>
-                </div>
-            </form>
+            {% empty %}
+                <p class="text-muted mb-0">Нет новых уведомлений.</p>
+            {% endfor %}
         </div>
-    </div>
+
+        <div class="page-card scroll-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-bold mb-0">Шаблоны тестов</h2>
+            </div>
+            {% for tmpl in templates_list %}
+                <div class="template-card">
+                    <div>
+                        <div class="fw-bold">{{ tmpl.title }}</div>
+                        <div class="text-muted small">{{ tmpl.created_at|date:"d.m.Y" }}</div>
+                    </div>
+                    <div class="d-flex gap-1">
+                        <a href="{% url 'use_test_template' tmpl.id %}" class="btn btn-sm btn-outline-primary">Использовать</a>
+                        <form method="post" action="{% url 'delete_test_template' tmpl.id %}" onsubmit="return confirm('Удалить шаблон?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                        </form>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted mb-0">Шаблонов пока нет. Сохраните шаблон из редактора теста.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="chart-grid">
+        <div class="page-card scroll-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-bold mb-0">Недавние тесты</h2>
+                <a href="{% url 'teacher_tests' %}" class="btn btn-sm btn-outline-primary">Все тесты</a>
+            </div>
+            {% for test in recent_tests %}
+                <div class="list-item">
+                    <div>
+                        <div class="fw-bold">{{ test.title }}</div>
+                        <div class="text-muted small">{{ test.category|default:"Без категории" }}</div>
+                    </div>
+                    <div class="d-flex gap-1 align-items-center">
+                        {% if test.is_active %}
+                            <span class="status-badge status-active">Активен</span>
+                        {% else %}
+                            <span class="status-badge status-hidden">Скрыт</span>
+                        {% endif %}
+                        <a href="{% url 'edit_test' test.id %}" class="btn btn-sm btn-outline-secondary">Открыть</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted mb-0">Тестов пока нет.</p>
+            {% endfor %}
+        </div>
+
+        <div class="page-card scroll-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-bold mb-0">Журнал действий</h2>
+                <a href="{% url 'export_activity_log' %}" class="btn btn-sm btn-outline-secondary">Экспорт</a>
+            </div>
+            {% for log in activity_log %}
+                <div class="log-item">
+                    <div class="fw-bold">{{ log.action }}</div>
+                    {% if log.details %}<div class="text-muted small">{{ log.details }}</div>{% endif %}
+                    <div class="log-time">{{ log.created_at|date:"d.m.Y H:i" }}</div>
+                </div>
+            {% empty %}
+                <p class="text-muted mb-0">Журнал пуст.</p>
+            {% endfor %}
+        </div>
+    </section>
 </div>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".scroll-card").forEach(function (card) {
+        card.addEventListener("wheel", function (e) {
+            var atTop = card.scrollTop === 0 && e.deltaY < 0;
+            var atBottom = card.scrollTop + card.clientHeight >= card.scrollHeight && e.deltaY > 0;
+            if (!atTop && !atBottom) {
+                e.stopPropagation();
+            }
+        }, { passive: true });
+    });
+});
+</script>
 {% endblock %}

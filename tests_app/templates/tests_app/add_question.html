@@ -1,24 +1,273 @@
 {% extends "tests_app/base.html" %}
+{% block title %}Добавить вопрос | TestFlow{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Добавить вопрос</h2>
 
-    <form method="post">
-        {% csrf_token %}
+<style>
+.question-page {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+}
 
-        <div class="mb-3">
-            <label class="form-label">Текст вопроса</label>
-            <input type="text" name="text" class="form-control" required>
+.question-header {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 28px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 24px;
+    align-items: center;
+}
+
+.question-label {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.question-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.15;
+    margin-bottom: 12px;
+}
+
+.question-text {
+    color: #64748b;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.question-info {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.info-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 12px;
+}
+
+.info-list {
+    margin: 0;
+    padding-left: 18px;
+    color: #475569;
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+.question-card {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 28px;
+}
+
+.form-title {
+    font-size: 1.25rem;
+    font-weight: 750;
+    color: #0f172a;
+    margin-bottom: 18px;
+}
+
+.form-label {
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.form-hint {
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 6px;
+    line-height: 1.6;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 18px;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 6px;
+}
+
+.actions-left,
+.actions-right {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+#correctTextBlock {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .question-header {
+        grid-template-columns: 1fr;
+    }
+
+    .question-header,
+    .question-card {
+        padding: 22px;
+    }
+
+    .question-title {
+        font-size: 1.65rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .actions-left,
+    .actions-right {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+</style>
+
+<div class="question-page">
+
+    <section class="question-header">
+        <div>
+            <div class="question-label">Добавление вопроса</div>
+
+            <h1 class="question-title">
+                Новый вопрос
+            </h1>
+
+            <p class="question-text">
+                Укажите формулировку вопроса и выберите тип ответа. Для вопроса с вариантами
+                ответы добавляются на следующем этапе.
+            </p>
         </div>
 
-        <button type="submit" class="btn btn-success">
-            Добавить ответы
-        </button>
+        <div class="question-info">
+            <div class="info-title">Типы вопросов</div>
 
-        <a href="{% url 'edit_test' test.id %}" class="btn btn-secondary">
-            Назад
-        </a>
-    </form>
+            <ul class="info-list">
+                <li>выбор одного или нескольких вариантов;</li>
+                <li>текстовый ответ с эталонным значением;</li>
+                <li>последующее редактирование в карточке теста;</li>
+                <li>использование в автоматической проверке.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="question-card">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-title">
+                Основные данные вопроса
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Текст вопроса</label>
+                <input
+                    type="text"
+                    name="text"
+                    class="form-control"
+                    placeholder="Введите вопрос"
+                    required>
+                <div class="form-hint">
+                    Формулировка должна быть понятной и не допускать двусмысленного ответа.
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Изображение к вопросу</label>
+                <input
+                    type="file"
+                    name="image"
+                    class="form-control"
+                    accept="image/*">
+            <div class="form-hint">
+                     Можно прикрепить изображение, схему, график или иллюстрацию к вопросу. Это поле необязательное.
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label class="form-label">Тип вопроса</label>
+                <select name="question_type" id="questionType" class="form-select">
+                    <option value="multiple">С вариантами ответа</option>
+                    <option value="text">Текстовый ответ</option>
+                </select>
+                <div class="form-hint">
+                    Для вопроса с вариантами ответа правильные варианты будут отмечены после сохранения вопроса.
+                </div>
+            </div>
+
+            <div class="mb-4" id="correctTextBlock">
+                <label class="form-label">Правильный текстовый ответ</label>
+                <input
+                    type="text"
+                    name="correct_text"
+                    class="form-control"
+                    placeholder="Введите правильный ответ">
+                <div class="form-hint">
+                    Этот ответ будет использоваться как эталон при автоматической проверке.
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <div class="actions-left">
+                    <a href="{% url 'edit_test' test.id %}" class="btn btn-outline-secondary">
+                        Назад к тесту
+                    </a>
+                </div>
+
+                <div class="actions-right">
+                    <button type="submit" class="btn btn-primary">
+                        Сохранить вопрос
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
+
 </div>
+
+<script>
+const questionType = document.getElementById('questionType');
+const correctTextBlock = document.getElementById('correctTextBlock');
+
+function toggleCorrectText() {
+    if (!questionType || !correctTextBlock) return;
+
+    if (questionType.value === 'text') {
+        correctTextBlock.style.display = 'block';
+    } else {
+        correctTextBlock.style.display = 'none';
+    }
+}
+
+if (questionType) {
+    questionType.addEventListener('change', toggleCorrectText);
+    toggleCorrectText();
+}
+</script>
+
 {% endblock %}

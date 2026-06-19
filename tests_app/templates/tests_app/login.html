@@ -5,247 +5,323 @@
 
 <style>
 .auth-page {
-    min-height: 72vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.auth-shell {
-    width: 100%;
-    max-width: 1120px;
+    max-width: 1040px;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: 28px;
+    grid-template-columns: 0.95fr 1.05fr;
+    gap: 20px;
     align-items: stretch;
 }
 
+/* ===== GLASS EFFECT ===== */
+.auth-info,
+.auth-card {
+    background: rgba(255, 255, 255, 0.38);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 22px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
+}
+
+/* ===== INFO ===== */
 .auth-info {
-    position: relative;
-    overflow: hidden;
-    border-radius: 30px;
-    padding: 42px 38px;
-    background:
-        radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.12), transparent 22%),
-        linear-gradient(135deg, rgba(255,255,255,0.9), rgba(246,250,255,0.95));
-    border: 1px solid rgba(226, 232, 240, 0.85);
-    box-shadow: 0 22px 60px rgba(15, 23, 42, 0.08);
+    padding: 30px;
 }
 
-.auth-info-content {
-    position: relative;
-    z-index: 1;
-}
-
-.auth-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px 14px;
-    border-radius: 999px;
-    background: rgba(37, 99, 235, 0.08);
+.auth-label {
+    display: inline-block;
+    padding: 7px 11px;
+    border-radius: 9px;
+    background: rgba(239, 246, 255, 0.68);
+    border: 1px solid rgba(191, 219, 254, 0.95);
     color: #1d4ed8;
-    font-weight: 700;
-    font-size: .92rem;
-    margin-bottom: 18px;
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    backdrop-filter: blur(8px);
 }
 
 .auth-title {
-    font-size: 2.3rem;
-    font-weight: 800;
-    line-height: 1.15;
+    font-size: 2.05rem;
+    font-weight: 900;
     color: #0f172a;
-    margin-bottom: 16px;
+    line-height: 1.12;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
 }
 
-.auth-subtitle {
-    color: #64748b;
-    line-height: 1.8;
-    margin-bottom: 26px;
-    max-width: 520px;
+.auth-text {
+    color: #475569;
+    line-height: 1.75;
+    margin-bottom: 24px;
 }
 
-.auth-features {
+.auth-list {
     display: grid;
-    gap: 14px;
+    gap: 12px;
 }
 
-.auth-feature {
-    background: rgba(255,255,255,0.72);
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    border-radius: 18px;
-    padding: 16px 18px;
+.auth-list-item {
+    background: rgba(255, 255, 255, 0.46);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 16px;
+    padding: 17px;
+    backdrop-filter: blur(10px);
 }
 
-.auth-feature-title {
-    font-weight: 700;
+.auth-list-title {
+    font-weight: 800;
     color: #0f172a;
-    margin-bottom: 6px;
+    margin-bottom: 7px;
 }
 
-.auth-feature-text {
-    color: #64748b;
+.auth-list-text {
+    color: #475569;
+    line-height: 1.65;
+    font-size: 14px;
     margin: 0;
-    line-height: 1.7;
 }
 
+/* ===== FORM ===== */
 .auth-card {
-    background: rgba(255,255,255,0.92);
-    border: 1px solid rgba(226, 232, 240, 0.85);
-    border-radius: 30px;
-    padding: 36px 32px;
-    box-shadow: 0 22px 60px rgba(15, 23, 42, 0.08);
+    padding: 30px;
 }
 
 .auth-card-title {
-    font-size: 2rem;
-    font-weight: 800;
+    font-size: 1.9rem;
+    font-weight: 900;
     color: #0f172a;
-    text-align: center;
     margin-bottom: 8px;
+    letter-spacing: -0.02em;
 }
 
 .auth-card-subtitle {
-    text-align: center;
-    color: #64748b;
-    margin-bottom: 26px;
+    color: #475569;
+    line-height: 1.7;
+    margin-bottom: 24px;
+}
+
+.form-section {
+    display: grid;
+    gap: 16px;
 }
 
 .form-label {
-    font-weight: 700;
-    color: #334155;
+    font-weight: 800;
+    color: #1e293b;
     margin-bottom: 8px;
 }
 
-.message-box .alert {
-    margin-bottom: 14px;
-    border-radius: 14px;
+.form-note {
+    display: block;
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 6px;
+    line-height: 1.5;
+}
+
+.auth-links {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 14px;
+}
+
+.auth-links a {
+    color: #1d4ed8;
+    text-decoration: none;
+    font-weight: 800;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
 }
 
 .auth-footer {
-    text-align: center;
     margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(203, 213, 225, 0.75);
     color: #64748b;
+    text-align: center;
+    font-size: 14px;
 }
 
 .auth-footer a {
-    color: #2563eb;
+    color: #1d4ed8;
     text-decoration: none;
-    font-weight: 700;
+    font-weight: 800;
 }
 
 .auth-footer a:hover {
     text-decoration: underline;
 }
 
-@media (max-width: 992px) {
-    .auth-shell {
-        grid-template-columns: 1fr;
-    }
+.message-box {
+    margin-bottom: 16px;
+}
 
-    .auth-info {
-        order: 2;
+.message-box:empty {
+    display: none;
+}
+
+.message-box .alert {
+    margin-bottom: 10px;
+    border-radius: 14px;
+    background: rgba(219, 234, 254, 0.72);
+    border: 1px solid rgba(147, 197, 253, 0.8);
+    color: #0f3d91;
+    backdrop-filter: blur(10px);
+}
+
+/* ===== INPUTS ===== */
+.auth-card .form-control {
+    background: rgba(255, 255, 255, 0.62) !important;
+    border: 1px solid rgba(191, 219, 254, 0.9) !important;
+    border-radius: 14px !important;
+    min-height: 48px;
+}
+
+.auth-card .form-control:focus {
+    background: rgba(255, 255, 255, 0.82) !important;
+    border-color: #60a5fa !important;
+    box-shadow: 0 0 0 0.15rem rgba(59, 130, 246, 0.14) !important;
+}
+
+/* ===== BUTTON ===== */
+.auth-card .btn-primary {
+    min-height: 48px;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 900px) {
+    .auth-page {
+        grid-template-columns: 1fr;
     }
 
     .auth-card {
         order: 1;
     }
+
+    .auth-info {
+        order: 2;
+    }
 }
 
 @media (max-width: 576px) {
-    .auth-card,
-    .auth-info {
-        padding: 26px 20px;
-        border-radius: 22px;
+    .auth-info,
+    .auth-card {
+        padding: 22px;
+        border-radius: 18px;
     }
 
     .auth-title {
-        font-size: 1.8rem;
+        font-size: 1.65rem;
     }
 
     .auth-card-title {
-        font-size: 1.65rem;
+        font-size: 1.45rem;
     }
 }
 </style>
 
 <div class="auth-page">
-    <div class="auth-shell">
 
-        <div class="auth-info">
-            <div class="auth-info-content">
-                <div class="auth-badge">🔐 Безопасный вход</div>
+    <section class="auth-info">
+        <div class="auth-label">Авторизация</div>
 
-                <h1 class="auth-title">Добро пожаловать в TestFlow</h1>
+        <h1 class="auth-title">
+            Вход в систему TestFlow
+        </h1>
 
-                <p class="auth-subtitle">
-                    Войди в систему по email, чтобы проходить тесты, смотреть результаты
-                    и пользоваться всеми возможностями платформы.
+        <p class="auth-text">
+            После входа пользователь получает доступ к функциям системы:
+            прохождению тестов, просмотру результатов и работе с личным кабинетом.
+        </p>
+
+        <div class="auth-list">
+            <div class="auth-list-item">
+                <div class="auth-list-title">Для студента</div>
+                <p class="auth-list-text">
+                    Доступны список тестов, прохождение заданий, результат и разбор ответов.
                 </p>
+            </div>
 
-                <div class="auth-features">
-                    <div class="auth-feature">
-                        <div class="auth-feature-title">Быстрый доступ</div>
-                        <p class="auth-feature-text">
-                            Начинай прохождение тестов и проверяй результаты в пару кликов.
-                        </p>
-                    </div>
+            <div class="auth-list-item">
+                <div class="auth-list-title">Для преподавателя</div>
+                <p class="auth-list-text">
+                    Доступно управление тестами, добавление вопросов и просмотр результатов студентов.
+                </p>
+            </div>
 
-                    <div class="auth-feature">
-                        <div class="auth-feature-title">Личный кабинет</div>
-                        <p class="auth-feature-text">
-                            История попыток, статистика и удобное управление профилем в одном месте.
-                        </p>
-                    </div>
-
-                    <div class="auth-feature">
-                        <div class="auth-feature-title">Удобно для преподавателей</div>
-                        <p class="auth-feature-text">
-                            Создавай тесты, задавай время и анализируй результаты студентов.
-                        </p>
-                    </div>
-                </div>
+            <div class="auth-list-item">
+                <div class="auth-list-title">Безопасность</div>
+                <p class="auth-list-text">
+                    Доступ к возможностям системы зависит от роли пользователя.
+                </p>
             </div>
         </div>
+    </section>
 
-        <div class="auth-card">
-            <div class="auth-card-title">Вход</div>
-            <div class="auth-card-subtitle">Введите email и пароль</div>
+    <section class="auth-card">
+        <h2 class="auth-card-title">Вход</h2>
 
-            <div class="message-box">
-                {% for message in messages %}
-                    <div class="alert alert-info">{{ message }}</div>
-                {% endfor %}
-            </div>
+        <p class="auth-card-subtitle">
+            Введите email и пароль, указанные при регистрации.
+        </p>
 
-            <form method="POST">
-                {% csrf_token %}
+        <div class="message-box">
+            {% for message in messages %}
+                <div class="alert alert-info">{{ message }}</div>
+            {% endfor %}
+        </div>
 
-                <div class="mb-3">
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-section">
+                <div>
                     <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" placeholder="Введите email" required>
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="Введите email"
+                        required>
+                    <small class="form-note">
+                        Используйте адрес электронной почты, указанный при регистрации.
+                    </small>
                 </div>
 
-                <div class="mb-3">
+                <div>
                     <label class="form-label">Пароль</label>
-                    <input type="password" name="password" class="form-control" placeholder="Введите пароль" required>
+                    <input
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="Введите пароль"
+                        required>
+                </div>
+
+                <div class="auth-links">
+                    <a href="{% url 'password_reset' %}">Забыли пароль?</a>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">
                     Войти
                 </button>
-            </form>
-
-            <div class="auth-footer">
-                Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a>
-                <p style="text-align:center; margin-top:10px;">
-                    <a href="{% url 'password_reset' %}">Забыли пароль?</a>
-                </p>
             </div>
+        </form>
+
+        <div class="auth-footer">
+            Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a>
         </div>
-                
-    </div>
+    </section>
+
 </div>
 
 {% endblock %}

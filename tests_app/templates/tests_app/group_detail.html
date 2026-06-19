@@ -1,0 +1,95 @@
+{% extends 'tests_app/base.html' %}
+{% block title %}{{ group.name }} | TestFlow{% endblock %}
+
+{% block content %}
+<style>
+.group-detail { max-width: 900px; margin: 0 auto; display: grid; gap: 20px; }
+.page-card { background: #fff; border: 1px solid #dbe2ea; border-radius: 10px; padding: 28px; }
+.student-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid #e5e7eb; }
+.student-row:last-child { border-bottom: none; }
+.student-info { flex: 1; }
+.student-name { font-weight: 700; color: #0f172a; }
+.student-email { color: #64748b; font-size: 13px; }
+.student-stats { color: #64748b; font-size: 13px; }
+.tests-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.test-tag { display: inline-block; padding: 4px 10px; border-radius: 6px; background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; font-size: 13px; font-weight: 600; }
+</style>
+
+<div class="group-detail">
+    <section class="page-card">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <a href="{% url 'teacher_groups' %}" class="text-muted small text-decoration-none">&larr; Назад к группам</a>
+                <h1 class="h3 fw-bold mb-1">{{ group.name }}</h1>
+                <p class="text-muted mb-0">Студентов: {{ students|length }} · Тестов назначено: {{ assigned_tests|length }}</p>
+            </div>
+            <form method="post" onsubmit="return confirm('Удалить группу «{{ group.name|escapejs }}»? Это действие необратимо.');">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="group_id" value="{{ group.id }}">
+                <button class="btn btn-outline-danger" type="submit">Удалить группу</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="page-card">
+        <h2 class="h5 fw-bold mb-3">Добавить студента</h2>
+        {% if available_students %}
+            <form method="post" class="d-flex gap-2 flex-wrap align-items-end">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add_student">
+                <input type="hidden" name="group_id" value="{{ group.id }}">
+                <div style="flex:1; min-width:250px;">
+                    <label class="form-label small text-muted">Студент</label>
+                    <select name="student_id" class="form-select" required>
+                        <option value="">Выберите студента</option>
+                        {% for s in available_students %}
+                            <option value="{{ s.id }}">{{ s.profile.full_name|default:s.email }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button class="btn btn-primary" type="submit">Добавить</button>
+            </form>
+        {% else %}
+            <p class="text-muted mb-0">Все студенты уже в группе или нет доступных студентов.</p>
+        {% endif %}
+    </section>
+
+    <section class="page-card">
+        <h2 class="h5 fw-bold mb-3">Студенты группы</h2>
+        {% if students %}
+            {% for s in students %}
+                <div class="student-row">
+                    <div class="student-info">
+                        <div class="student-name">{{ s.profile.full_name|default:s.email }}</div>
+                        <div class="student-email">{{ s.email }}</div>
+                    </div>
+                    <div class="student-stats">
+                        {{ s.results_count }} попыток · {{ s.avg_percent }}%
+                    </div>
+                    <form method="post" onsubmit="return confirm('Удалить {{ s.profile.full_name|default:s.email|escapejs }} из группы?');">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="remove_student">
+                        <input type="hidden" name="group_id" value="{{ group.id }}">
+                        <input type="hidden" name="student_id" value="{{ s.id }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted mb-0">В группе пока нет студентов.</p>
+        {% endif %}
+    </section>
+
+    {% if assigned_tests %}
+    <section class="page-card">
+        <h2 class="h5 fw-bold mb-3">Назначенные тесты</h2>
+        <div class="tests-list">
+            {% for t in assigned_tests %}
+                <a href="{% url 'edit_test' t.id %}" class="test-tag text-decoration-none">{{ t.title }}</a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,477 @@
+{% extends 'tests_app/base.html' %}
+{% block title %}Разбор результата | TestFlow{% endblock %}
+
+{% block content %}
+
+<style>
+.teacher-review-page {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+}
+
+.review-header {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 28px;
+    display: flex;
+    justify-content: space-between;
+    gap: 22px;
+    align-items: flex-start;
+}
+
+.review-label {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.review-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.15;
+    margin-bottom: 12px;
+}
+
+.review-subtitle {
+    color: #64748b;
+    line-height: 1.7;
+    margin: 0;
+    max-width: 760px;
+}
+
+.review-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
+.review-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.review-stat-card {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.review-stat-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.review-stat-label {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.questions-review-list {
+    display: grid;
+    gap: 16px;
+}
+
+.review-question-card {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 24px;
+}
+
+.review-question-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.review-question-number {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.review-question-text {
+    color: #0f172a;
+    font-size: 1.12rem;
+    font-weight: 750;
+    line-height: 1.5;
+}
+
+.status-correct,
+.status-partial,
+.status-wrong {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 10px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.status-correct {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.status-partial {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.status-wrong {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+/* Картинка вопроса */
+.review-question-image-wrap {
+    margin: 0 0 22px;
+    border: 1px solid #dbe2ea;
+    border-radius: 12px;
+    background: #f8fafc;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.review-question-image {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    max-height: 480px;
+    border-radius: 10px;
+    object-fit: contain;
+}
+
+.answers-review-list {
+    display: grid;
+    gap: 10px;
+}
+
+.answer-review-item {
+    border: 1px solid #e5e7eb;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: center;
+}
+
+.answer-review-text {
+    color: #334155;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.answer-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.badge-selected,
+.badge-correct,
+.badge-wrong {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.badge-selected {
+    background: #dbeafe;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+
+.badge-correct {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.badge-wrong {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.text-answer-review {
+    display: grid;
+    gap: 12px;
+}
+
+.text-answer-row {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 14px;
+}
+
+.text-answer-label {
+    font-size: 13px;
+    font-weight: 800;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+.text-answer-value {
+    color: #0f172a;
+    font-weight: 700;
+    line-height: 1.6;
+}
+
+.empty-answer {
+    color: #94a3b8;
+    font-style: italic;
+}
+
+@media (max-width: 900px) {
+    .review-header {
+        flex-direction: column;
+    }
+
+    .review-actions,
+    .review-actions .btn {
+        width: 100%;
+    }
+
+    .review-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .review-question-top {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 576px) {
+    .review-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .review-header,
+    .review-question-card {
+        padding: 20px;
+    }
+
+    .answer-review-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .answer-badges {
+        justify-content: flex-start;
+    }
+
+    .review-title {
+        font-size: 1.55rem;
+    }
+}
+</style>
+
+<div class="teacher-review-page">
+
+    <section class="review-header">
+        <div>
+            <div class="review-label">Разбор результата</div>
+
+            <h1 class="review-title">
+                {{ test.title }}
+            </h1>
+
+            <p class="review-subtitle">
+                Преподаватель просматривает работу студента: выбранные ответы,
+                правильные варианты, текстовые ответы и итоговую оценку.
+            </p>
+        </div>
+
+        <div class="review-actions d-flex gap-2">
+            <a href="{% url 'test_results' test.id %}" class="btn btn-outline-secondary">
+                Назад к результатам
+            </a>
+            <a href="{% url 'export_student_result_pdf' result.id %}" class="btn btn-outline-primary">
+                Скачать PDF-отчёт
+            </a>
+        </div>
+    </section>
+
+    <section class="review-stats">
+        <div class="review-stat-card">
+            <div class="review-stat-value">{{ student_name }}</div>
+            <div class="review-stat-label">Студент</div>
+        </div>
+
+        <div class="review-stat-card">
+            <div class="review-stat-value">{{ result.score }}</div>
+            <div class="review-stat-label">Баллы</div>
+        </div>
+
+        <div class="review-stat-card">
+            <div class="review-stat-value">{{ result.percent }}%</div>
+            <div class="review-stat-label">Процент выполнения</div>
+        </div>
+
+        <div class="review-stat-card">
+            <div class="review-stat-value">{{ result.grade }}</div>
+            <div class="review-stat-label">Оценка</div>
+        </div>
+    </section>
+
+    <form method="post">
+        {% csrf_token %}
+
+    <section class="questions-review-list">
+        {% for item in review_data %}
+            <article class="review-question-card">
+
+                <div class="review-question-top">
+                    <div>
+                        <div class="review-question-number">
+                            Вопрос {{ forloop.counter }}
+                        </div>
+
+                        <div class="review-question-text">
+                            {{ item.question_text }}
+                        </div>
+                    </div>
+
+                    <div class="{{ item.status_class }}">
+                        {{ item.status_label }}
+                    </div>
+                </div>
+
+                {% if item.question_image %}
+                    <div class="review-question-image-wrap">
+                        <img
+                            src="{{ item.question_image.url }}"
+                            alt="Изображение к вопросу"
+                            class="review-question-image">
+                    </div>
+                {% endif %}
+
+                {% if item.question_type == 'text' %}
+                    <div class="text-answer-review">
+                        <div class="text-answer-row">
+                            <div class="text-answer-label">Ответ студента</div>
+                            <div class="text-answer-value">
+                                {% if item.user_text %}
+                                    {{ item.user_text }}
+                                {% else %}
+                                    <span class="empty-answer">Ответ не указан</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="text-answer-row">
+                            <div class="text-answer-label">Правильный ответ</div>
+                            <div class="text-answer-value">
+                                {% if item.correct_text %}
+                                    {{ item.correct_text }}
+                                {% else %}
+                                    <span class="empty-answer">Правильный ответ не задан</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="text-answer-row mt-3">
+                            <div class="text-answer-label">Оценка преподавателя</div>
+                            <div class="d-flex flex-wrap gap-3 align-items-center">
+                                <label class="d-flex align-items-center gap-2">
+                                    <input type="radio" name="review_score_{{ item.question_id }}" value="1"
+                                        {% if item.review_score >= 1 %}checked{% endif %}>
+                                    Зачёт
+                                </label>
+                                <label class="d-flex align-items-center gap-2">
+                                    <input type="radio" name="review_score_{{ item.question_id }}" value="0"
+                                        {% if item.review_score < 1 %}checked{% endif %}>
+                                    Незачёт
+                                </label>
+                                <input type="text" name="review_comment_{{ item.question_id }}"
+                                    class="form-control form-control-sm" style="max-width:320px"
+                                    placeholder="Комментарий" value="{{ item.review_comment }}">
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="answers-review-list">
+                        {% for answer in item.answers %}
+                            <div class="answer-review-item">
+                                <div class="answer-review-text">
+                                    {{ answer.text }}
+                                </div>
+
+                                <div class="answer-badges">
+                                    {% if answer.is_selected %}
+                                        <span class="badge-selected">
+                                            Выбрал студент
+                                        </span>
+                                    {% endif %}
+
+                                    {% if answer.is_correct %}
+                                        <span class="badge-correct">
+                                            Правильный
+                                        </span>
+                                    {% endif %}
+
+                                    {% if answer.is_selected and not answer.is_correct %}
+                                        <span class="badge-wrong">
+                                            Ошибка
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </article>
+        {% endfor %}
+    </section>
+
+    {% if has_pending_text or review_data %}
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Сохранить проверку текстовых ответов</button>
+        </div>
+    {% endif %}
+    </form>
+
+</div>
+
+{% endblock %}

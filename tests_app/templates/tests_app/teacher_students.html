@@ -1,0 +1,100 @@
+{% extends 'tests_app/base.html' %}
+{% block title %}Студенты | TestFlow{% endblock %}
+
+{% block content %}
+<style>
+.students-page { max-width: 1180px; margin: 0 auto; display: grid; gap: 20px; }
+.page-card { background: #fff; border: 1px solid #dbe2ea; border-radius: 10px; padding: 28px; }
+.page-title { font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
+.page-text { color: #64748b; margin: 0; }
+.students-table { width: 100%; border-collapse: collapse; }
+.students-table th, .students-table td { padding: 14px 12px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+.students-table th { color: #64748b; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+.badge-pending { background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+.search-box { padding: 16px; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 16px; }
+.search-box input { height: 44px; }
+.table-wrap { overflow-x: auto; max-height: 600px; overflow-y: auto; }
+.table-wrap::-webkit-scrollbar { width: 6px; height: 6px; }
+.table-wrap::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+.table-wrap::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+</style>
+
+<div class="students-page">
+    <section class="page-card">
+        <div class="page-title">Студенты</div>
+        <p class="page-text">Статистика прохождений по тестам, которые вы создали.</p>
+    </section>
+
+    <section class="page-card">
+        <div class="search-box">
+            <input type="text" id="studentSearch" class="form-control" placeholder="Поиск по имени, группе или email..." autocomplete="off">
+        </div>
+
+        {% if students_data %}
+        <div class="table-wrap">
+        <table class="students-table" id="studentsTable">
+            <thead>
+                <tr>
+                    <th>Студент</th>
+                    <th>Группа</th>
+                    <th>Email</th>
+                    <th>Попыток</th>
+                    <th>Средний %</th>
+                    <th>Последний результат</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in students_data %}
+                <tr class="student-row" data-search="{{ item.student.profile.full_name|default:item.student.email|lower }} {{ item.student.profile.student_group|default:''|lower }} {{ item.student.email|lower }}">
+                    <td>{{ item.student.profile.full_name|default:item.student.email }}</td>
+                    <td>{{ item.student.profile.student_group|default:"—" }}</td>
+                    <td>{{ item.student.email }}</td>
+                    <td>{{ item.attempts_count }}</td>
+                    <td>{{ item.avg_percent }}%</td>
+                    <td>
+                        {% if item.last_result %}
+                            {{ item.last_result.test.title }} — {{ item.last_result.percent }}%
+                            {% if item.last_result.grading_status == 'pending_review' %}
+                                <span class="badge-pending">На проверке</span>
+                            {% endif %}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+        {% if page_obj.has_other_pages %}
+        <nav class="mt-3 d-flex gap-2">
+            {% if page_obj.has_previous %}
+                <a class="btn btn-sm btn-outline-secondary" href="?page={{ page_obj.previous_page_number }}">Назад</a>
+            {% endif %}
+            <span class="align-self-center text-muted">Стр. {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a class="btn btn-sm btn-outline-secondary" href="?page={{ page_obj.next_page_number }}">Вперёд</a>
+            {% endif %}
+        </nav>
+        {% endif %}
+        {% else %}
+            <p class="text-muted mb-0">Студентов пока нет.</p>
+        {% endif %}
+    </section>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var input = document.getElementById("studentSearch");
+    if (!input) return;
+    input.addEventListener("input", function() {
+        var q = input.value.trim().toLowerCase();
+        document.querySelectorAll(".student-row").forEach(function(row) {
+            var text = row.dataset.search || "";
+            row.style.display = text.includes(q) ? "" : "none";
+        });
+    });
+});
+</script>
+{% endblock %}

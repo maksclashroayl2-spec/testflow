@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
 
-# ===================== БАЗОВЫЕ НАСТРОЙКИ =====================
+#БАЗОВЫЕ НАСТРОЙКИ
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-dev-key-change-me")
 
 DEBUG = os.getenv("DEBUG", "True") == "True"
@@ -28,7 +28,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
-# ===================== ПРИЛОЖЕНИЯ =====================
+#ПРИЛОЖЕНИЯ
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,11 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
     'tests_app.apps.TestsAppConfig',
 ]
 
 
-# ===================== MIDDLEWARE =====================
+#MIDDLEWARE
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -55,13 +56,13 @@ MIDDLEWARE = [
 ]
 
 
-# ===================== ROOT / TEMPLATES / WSGI =====================
-ROOT_URLCONF = 'diplom_project.urls'
+#ROOT / TEMPLATES / WSGI
+ROOT_URLCONF = 'testflow_project.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'tests_app' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,10 +74,10 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'diplom_project.wsgi.application'
+WSGI_APPLICATION = 'testflow_project.wsgi.application'
 
 
-# ===================== БАЗА ДАННЫХ =====================
+#БАЗА ДАННЫХ
 # Локально будет SQLite, на сервере — PostgreSQL через DATABASE_URL
 DATABASES = {
     "default": dj_database_url.parse(
@@ -87,7 +88,7 @@ DATABASES = {
 }
 
 
-# ===================== ВАЛИДАТОРЫ ПАРОЛЯ =====================
+#ВАЛИДАТОРЫ ПАРОЛЯ
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -96,14 +97,14 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# ===================== ЛОКАЛИЗАЦИЯ =====================
+#ЛОКАЛИЗАЦИЯ
 LANGUAGE_CODE = 'ru'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Omsk'
 USE_I18N = True
 USE_TZ = True
 
 
-# ===================== STATIC / MEDIA =====================
+#STATIC / MEDIA
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
@@ -125,42 +126,123 @@ STORAGES = {
 }
 
 
-# ===================== DEFAULT PK =====================
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# ===================== АВТОРИЗАЦИЯ =====================
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 3600
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
+FILE_UPLOAD_PERMISSIONS = 0o644
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '30/minute',
+        'user': '60/minute',
+    },
+}
+
+
+#ЛОГГИНГ
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'tests_app': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+    },
+}
+
+if DEBUG:
+    LOGGING['loggers']['django.db.backends'] = {
+        'handlers': ['console'],
+        'level': 'WARNING',
+        'propagate': False,
+    }
+
+
+#АВТОРИЗАЦИЯ
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 
-# ===================== СЕКРЕТНЫЙ КОД ПРЕПОДАВАТЕЛЯ =====================
+#СЕКРЕТНЫЙ КОД ПРЕПОДАВАТЕЛЯ
 TEACHER_SECRET_KEY = os.getenv("TEACHER_SECRET_KEY", "TEACHER_2026")
 
 
-# ===================== EMAIL =====================
-# Для локальной разработки можно оставить console backend
-# Для продакшена укажешь SMTP в .env
+#КЭШИРОВАНИЕ
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
+
+#EMAIL
 EMAIL_BACKEND = os.getenv(
     "EMAIL_BACKEND",
-    "django.core.mail.backends.console.EmailBackend"
+    "django.core.mail.backends.smtp.EmailBackend"
 )
 
-EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.mail.ru")
-EMAIL_PORT = int(os.getenv("EMAIL_PORT", 465))
-EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "True") == "True"
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "False") == "True"
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
 
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False") == "True"
 
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
-SERVER_EMAIL = os.getenv("SERVER_EMAIL", EMAIL_HOST_USER)
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    EMAIL_HOST_USER
+)
 
+SERVER_EMAIL = os.getenv(
+    "SERVER_EMAIL",
+    EMAIL_HOST_USER
+)
 
-# ===================== SECURITY ДЛЯ ПРОДАКШЕНА =====================
+#SECURITY ДЛЯ ПРОДАКШЕНА
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 if not DEBUG:
@@ -170,7 +252,7 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
 
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True

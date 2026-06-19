@@ -1,80 +1,466 @@
 {% extends 'tests_app/base.html' %}
+{% block title %}Добавить ответы | TestFlow{% endblock %}
 
 {% block content %}
 
-<div class="container mt-4">
+<style>
+.answers-page {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+}
 
-    <h3 class="mb-4">Добавить ответы</h3>
+.answers-header {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 28px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 24px;
+    align-items: center;
+}
 
-    <div class="card mb-4 shadow-sm">
-        <div class="card-body">
-            <h5 class="mb-0">{{ question.text }}</h5>
+.answers-label {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.answers-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.15;
+    margin-bottom: 12px;
+}
+
+.answers-text {
+    color: #64748b;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.answers-info {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.info-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 12px;
+}
+
+.info-list {
+    margin: 0;
+    padding-left: 18px;
+    color: #475569;
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+.question-box {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 22px;
+}
+
+.question-box-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 10px;
+}
+
+.question-text {
+    font-size: 1.15rem;
+    font-weight: 750;
+    color: #0f172a;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.question-image-preview {
+    margin-top: 16px;
+    border: 1px solid #dbe2ea;
+    border-radius: 12px;
+    background: #f8fafc;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.question-image-preview img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    max-height: 360px;
+    border-radius: 10px;
+    object-fit: contain;
+}
+
+.answers-card {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 28px;
+}
+
+.form-title {
+    font-size: 1.25rem;
+    font-weight: 750;
+    color: #0f172a;
+    margin-bottom: 18px;
+}
+
+.question-image-edit-box {
+    margin-bottom: 22px;
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.question-image-edit-title {
+    font-size: 1rem;
+    font-weight: 750;
+    color: #0f172a;
+    margin-bottom: 14px;
+}
+
+.current-question-image-wrap {
+    border: 1px solid #dbe2ea;
+    border-radius: 12px;
+    background: #ffffff;
+    padding: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.current-question-image {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    max-height: 360px;
+    border-radius: 10px;
+    object-fit: contain;
+}
+
+.no-question-image {
+    padding: 14px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 14px;
+}
+
+.delete-image-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #991b1b;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 8px;
+}
+
+.delete-image-row input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    padding: 0 !important;
+    cursor: pointer;
+    accent-color: #dc2626;
+}
+
+.answers-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.answer-input {
+    display: grid;
+    gap: 8px;
+}
+
+.form-label {
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 0;
+}
+
+.form-hint {
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 6px;
+    line-height: 1.6;
+}
+
+.correct-block {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 18px;
+    margin-top: 20px;
+}
+
+.correct-title {
+    font-size: 1rem;
+    font-weight: 750;
+    color: #0f172a;
+    margin-bottom: 12px;
+}
+
+.correct-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 18px;
+}
+
+.form-check {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 28px;
+}
+
+.form-check-input {
+    float: none !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    min-height: 22px !important;
+    padding: 0 !important;
+    cursor: pointer;
+    accent-color: #1d4ed8;
+}
+
+.form-check-label {
+    color: #334155;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 18px;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 20px;
+}
+
+.actions-left,
+.actions-right {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .answers-header {
+        grid-template-columns: 1fr;
+    }
+
+    .answers-header,
+    .answers-card,
+    .question-box {
+        padding: 22px;
+    }
+
+    .answers-title {
+        font-size: 1.65rem;
+    }
+
+    .correct-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .actions-left,
+    .actions-right {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+</style>
+
+<div class="answers-page">
+
+    <section class="answers-header">
+        <div>
+            <div class="answers-label">Добавление ответов</div>
+
+            <h1 class="answers-title">
+                Варианты ответа
+            </h1>
+
+            <p class="answers-text">
+                Добавьте варианты ответа для выбранного вопроса и отметьте правильные.
+                При необходимости можно заменить или удалить изображение, связанное с вопросом.
+            </p>
         </div>
-    </div>
 
-    <form method="post">
-        {% csrf_token %}
+        <div class="answers-info">
+            <div class="info-title">Правила заполнения</div>
 
-        <div class="mb-3">
-            <label class="form-label">Ответ 1</label>
-            <input type="text" name="answers" class="form-control" required>
+            <ul class="info-list">
+                <li>первые два ответа обязательны;</li>
+                <li>можно указать до четырех вариантов;</li>
+                <li>можно отметить несколько правильных ответов;</li>
+                <li>изображение к вопросу можно заменить или удалить.</li>
+            </ul>
         </div>
+    </section>
 
-        <div class="mb-3">
-            <label class="form-label">Ответ 2</label>
-            <input type="text" name="answers" class="form-control" required>
-        </div>
+    <section class="question-box">
+        <div class="question-box-title">Вопрос</div>
 
-        <div class="mb-3">
-            <label class="form-label">Ответ 3</label>
-            <input type="text" name="answers" class="form-control">
-        </div>
+        <p class="question-text">
+            {{ question.text }}
+        </p>
 
-        <div class="mb-3">
-            <label class="form-label">Ответ 4</label>
-            <input type="text" name="answers" class="form-control">
-        </div>
+        {% if question.image %}
+            <div class="question-image-preview">
+                <img src="{{ question.image.url }}" alt="Изображение к вопросу">
+            </div>
+        {% endif %}
+    </section>
 
-        <hr class="my-4">
+    <section class="answers-card">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Правильные ответы</label>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="correct" value="0" id="correct1">
-                <label class="form-check-label" for="correct1">
-                    Ответ 1
-                </label>
+            <div class="form-title">
+                Ответы к вопросу
             </div>
 
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="correct" value="1" id="correct2">
-                <label class="form-check-label" for="correct2">
-                    Ответ 2
-                </label>
+            <div class="question-image-edit-box">
+                <div class="question-image-edit-title">
+                    Изображение к вопросу
+                </div>
+
+                {% if question.image %}
+                    <div class="current-question-image-wrap">
+                        <img
+                            src="{{ question.image.url }}"
+                            alt="Изображение к вопросу"
+                            class="current-question-image">
+                    </div>
+
+                    <label class="delete-image-row">
+                        <input type="checkbox" name="delete_image" value="1">
+                        <span>Удалить текущее изображение</span>
+                    </label>
+                {% else %}
+                    <div class="no-question-image">
+                        Изображение к этому вопросу пока не добавлено.
+                    </div>
+                {% endif %}
+
+                <div class="mt-3">
+                    <label class="form-label">Заменить или добавить изображение</label>
+                    <input
+                        type="file"
+                        name="question_image"
+                        class="form-control"
+                        accept="image/*">
+                    <div class="form-hint">
+                        Можно загрузить новую картинку, схему, график или иллюстрацию.
+                        Если выбрать новый файл, старое изображение будет заменено.
+                    </div>
+                </div>
             </div>
 
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="correct" value="2" id="correct3">
-                <label class="form-check-label" for="correct3">
-                    Ответ 3
-                </label>
+            <div class="answers-grid">
+                {% for slot in answer_slots %}
+                    <div class="answer-input">
+                        <label class="form-label">
+                            Ответ {{ slot.number }}
+                        </label>
+
+                        <input
+                            type="text"
+                            name="answers"
+                            class="form-control"
+                            value="{{ slot.text }}"
+                            placeholder="Введите вариант ответа"
+                            {% if slot.required %}required{% endif %}>
+                    </div>
+                {% endfor %}
             </div>
 
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="correct" value="3" id="correct4">
-                <label class="form-check-label" for="correct4">
-                    Ответ 4
-                </label>
+            <div class="correct-block">
+                <div class="correct-title">Правильные ответы</div>
+
+                <div class="correct-grid">
+                    {% for slot in answer_slots %}
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="correct"
+                                value="{{ slot.index }}"
+                                id="correct{{ slot.number }}"
+                                {% if slot.is_correct %}checked{% endif %}>
+
+                            <label class="form-check-label" for="correct{{ slot.number }}">
+                                Ответ {{ slot.number }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-hint">
+                    Отметьте один или несколько вариантов, которые должны считаться правильными.
+                </div>
             </div>
 
-        </div>
+            <div class="form-actions">
+                <div class="actions-left">
+                    <a href="{% url 'edit_test' question.test.id %}" class="btn btn-outline-secondary">
+                        Назад к тесту
+                    </a>
+                </div>
 
-        <button type="submit" class="btn btn-success mt-3">
-            Сохранить ответы
-        </button>
-
-    </form>
+                <div class="actions-right">
+                    <button type="submit" class="btn btn-primary">
+                        Сохранить ответы
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
 
 </div>
 

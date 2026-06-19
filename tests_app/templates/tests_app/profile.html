@@ -1,209 +1,537 @@
 {% extends "tests_app/base.html" %}
-{% block title %}Профиль{% endblock %}
+{% block title %}Профиль | TestFlow{% endblock %}
 
 {% block content %}
 
 <style>
-.profile-hero {
-    position: relative;
-    overflow: hidden;
-    border-radius: 32px;
-    padding: 48px 24px 36px;
-    background:
-        radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.12), transparent 24%),
-        linear-gradient(135deg, rgba(255,255,255,0.9), rgba(245,249,255,0.94));
-    border: 1px solid rgba(226, 232, 240, 0.85);
-    box-shadow: 0 22px 60px rgba(15, 23, 42, 0.08);
-    text-align: center;
+.profile-page {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+}
+
+/* ===== HEADER ===== */
+.profile-header {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 28px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 22px;
+    align-items: center;
 }
 
 .avatar-upload {
     position: relative;
-    width: 136px;
-    height: 136px;
-    margin: 0 auto 18px;
+    width: 112px;
+    height: 112px;
+    flex-shrink: 0;
 }
 
-.avatar-upload img {
-    width: 136px;
-    height: 136px;
+.avatar-box {
+    width: 112px;
+    height: 112px;
+    border-radius: 10px;
+    background: #f1f5f9;
+    border: 1px solid #dbe2ea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.avatar-box img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border-radius: 50%;
-    border: 5px solid #fff;
-    box-shadow: 0 14px 35px rgba(0,0,0,.15);
+}
+
+.avatar-fallback {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1d4ed8;
 }
 
 .avatar-plus {
     position: absolute;
-    right: 6px;
-    bottom: 8px;
+    right: -6px;
+    bottom: -6px;
     width: 34px;
     height: 34px;
-    border-radius: 50%;
-    background: #2563eb;
-    color: #fff;
+    border-radius: 8px;
+    background: #1d4ed8;
+    color: #ffffff;
     font-size: 20px;
-    text-align: center;
     line-height: 34px;
+    text-align: center;
     cursor: pointer;
+    border: 2px solid #ffffff;
+}
+
+.profile-label {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
 }
 
 .profile-name {
     font-size: 2rem;
     font-weight: 800;
+    color: #0f172a;
+    line-height: 1.15;
+    margin-bottom: 8px;
 }
 
 .profile-meta {
     color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 0;
+}
+
+/* ===== STATS ===== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
 }
 
 .stat-card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 20px;
-    text-align: center;
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 22px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ===== CONTENT ===== */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 20px;
+    align-items: start;
 }
 
 .section-card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 24px;
+}
+
+.section-header {
+    margin-bottom: 18px;
+}
+
+.section-title {
+    font-size: 1.35rem;
+    font-weight: 750;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.section-subtitle {
+    color: #64748b;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* ===== TABLE ===== */
+.results-wrap {
+    overflow-x: auto;
+}
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 640px;
+}
+
+.results-table thead th {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.results-table tbody td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #334155;
+    vertical-align: middle;
+}
+
+.results-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.result-title {
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.result-date {
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 3px;
+}
+
+.grade-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 13px;
+}
+
+.grade-5 {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.grade-4 {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+
+.grade-3 {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.grade-2 {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.empty-state {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    padding: 26px;
+    text-align: center;
+    color: #64748b;
+    line-height: 1.7;
+}
+
+/* ===== FORM ===== */
+.form-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.form-label {
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.form-note {
+    display: block;
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 6px;
+    line-height: 1.5;
+}
+
+.bio-box {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 16px;
+    color: #475569;
+    line-height: 1.7;
+    margin-bottom: 18px;
+}
+
+.profile-note {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    color: #64748b;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+@media (max-width: 992px) {
+    .profile-header {
+        grid-template-columns: 1fr;
+        text-align: left;
+    }
+
+    .stats-grid,
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .profile-header,
+    .section-card,
+    .stat-card {
+        padding: 20px;
+    }
+
+    .profile-name {
+        font-size: 1.55rem;
+    }
 }
 </style>
 
-<div class="container">
+<div class="profile-page">
 
-    <!-- HEADER -->
-    <div class="profile-hero mb-4">
-
+    <section class="profile-header">
         <div class="avatar-upload">
             <form method="post" enctype="multipart/form-data" id="avatarForm">
                 {% csrf_token %}
+
                 <label style="cursor:pointer;">
-                    <img src="{{ profile.avatar.url }}">
+                    <div class="avatar-box">
+                        {% if profile.avatar %}
+                            <img src="{{ profile.avatar.url }}" alt="Аватар пользователя">
+                        {% else %}
+                            <div class="avatar-fallback">TF</div>
+                        {% endif %}
+                    </div>
+
                     <div class="avatar-plus">+</div>
                     <input type="file" name="avatar" id="avatarInput" hidden>
                 </label>
             </form>
         </div>
 
-        <!-- 🔥 ИМЯ -->
-        <div class="profile-name">
-            {{ profile.full_name|default:request.user.email }}
-        </div>
+        <div>
+            <div class="profile-label">Профиль студента</div>
 
-        <div class="profile-meta">
-            {{ request.user.email }} · Зарегистрирован: {{ request.user.date_joined|date:"d.m.Y" }}
-        </div>
-
-        {% if profile.bio %}
-            <p>{{ profile.bio }}</p>
-        {% else %}
-            <p>Добавь немного информации о себе</p>
-        {% endif %}
-    </div>
-
-    <!-- СТАТИСТИКА -->
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="stat-card">
-                <h3>{{ total_tests }}</h3>
-                <small>Тестов пройдено</small>
+            <div class="profile-name">
+                {{ profile.full_name|default:request.user.email|default:request.user.username }}
             </div>
+
+            <p class="profile-meta">
+                {{ request.user.email|default:request.user.username }} ·
+                дата регистрации: {{ request.user.date_joined|date:"d.m.Y" }}
+            </p>
         </div>
-        <div class="col-md-4">
-            <div class="stat-card">
-                <h3>{{ avg_percent }}%</h3>
-                <small>Средний результат</small>
+    </section>
+
+    <section class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ total_tests }}</div>
+            <div class="stat-label">Тестов пройдено</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-value">{{ avg_percent }}%</div>
+            <div class="stat-label">Средний результат</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-value">{{ best_result.grade|default:"—" }}</div>
+            <div class="stat-label">Лучшая оценка</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ level }}</div>
+            <div class="stat-label">Уровень</div>
+        </div>
+    </section>
+
+    <section class="content-grid">
+
+        <div class="section-card">
+            <div class="section-header">
+                <h3 class="section-title">История прохождения</h3>
+                <p class="section-subtitle">
+                    Здесь отображаются завершённые тесты, результаты и ссылки на разбор ответов.
+                </p>
             </div>
+
+            {% if results %}
+                <div class="results-wrap">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Тест</th>
+                                <th>Баллы</th>
+                                <th>Процент</th>
+                                <th>Оценка</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for r in results %}
+                                <tr>
+                                    <td>
+                                        <div class="result-title">{{ r.test.title }}</div>
+                                        <div class="result-date">
+                                            {{ r.created_at|date:"d.m.Y H:i" }}
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        {{ r.score }}/{{ r.test_questions_count }}
+                                    </td>
+
+                                    <td>
+                                        {{ r.percent }}%
+                                    </td>
+
+                                    <td>
+                                        <span class="grade-badge grade-{{ r.grade }}">
+                                            {{ r.grade }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <a href="{% url 'review_test' r.id %}" class="btn btn-sm btn-outline-primary">
+                                            Разбор
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    Вы ещё не проходили тесты. После первой попытки здесь появится история результатов.
+                </div>
+            {% endif %}
         </div>
-        <div class="col-md-4">
-            <div class="stat-card">
-                <h3>{{ best_result.grade|default:"—" }}</h3>
-                <small>Лучшая оценка</small>
+
+        <div class="section-card">
+            <div class="section-header">
+                <h3 class="section-title">Данные профиля</h3>
+                <p class="section-subtitle">
+                    Можно изменить имя, краткую информацию и фотографию профиля.
+                </p>
             </div>
-        </div>
-    </div>
 
-    <div class="row">
-
-        <!-- ИСТОРИЯ -->
-        <div class="col-md-8">
-            <div class="section-card">
-                <h4>📊 История тестов</h4>
-
-                {% if results %}
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Тест</th>
-                            <th>Результат</th>
-                            <th>Процент</th>
-                            <th>Оценка</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for r in results %}
-                        <tr>
-                            <td>{{ r.test.title }}</td>
-                            <td>{{ r.score }}/{{ r.test.questions.count }}</td>
-                            <td>{{ r.percent }}%</td>
-                            <td>{{ r.grade }}</td>
-                            <td>
-                                <a href="{% url 'review_test' r.id %}" class="btn btn-sm btn-primary">
-                                    Ответы
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="bio-box">
+                {% if profile.bio %}
+                    {{ profile.bio }}
                 {% else %}
-                    <p>Вы ещё не проходили тесты</p>
+                    Информация о пользователе пока не заполнена.
                 {% endif %}
             </div>
-        </div>
 
-        <!-- РЕДАКТИРОВАНИЕ -->
-        <div class="col-md-4">
-            <div class="section-card">
-                <h4>Редактирование профиля</h4>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
 
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-
-                    <!-- 🔥 ИМЯ -->
-                    <div class="mb-3">
-                        <label>Имя</label>
-                        <input type="text"
-                               name="full_name"
-                               class="form-control"
-                               value="{{ profile.full_name|default_if_none:'' }}">
+                <div class="form-grid">
+                    <div>
+                        <label class="form-label">Имя</label>
+                        <input
+                            type="text"
+                            name="full_name"
+                            class="form-control"
+                            value="{{ profile.full_name|default_if_none:'' }}"
+                            placeholder="Введите имя">
+                        <small class="form-note">
+                            Это имя будет отображаться в профиле и истории результатов.
+                        </small>
                     </div>
 
-                    <!-- BIO -->
-                    <div class="mb-3">
-                        <label>О себе</label>
-                        <textarea name="bio"
-                                  class="form-control">{{ profile.bio|default_if_none:'' }}</textarea>
+                    <div>
+                        <label class="form-label">Группа</label>
+                        <select name="student_group" class="form-select">
+                            <option value="">Без группы</option>
+                            {% for group in student_groups %}
+                                <option value="{{ group.id }}" {% if profile.student_group_id == group.id %}selected{% endif %}>
+                                    {{ group.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
                     </div>
 
-                    <button class="btn btn-primary w-100">Сохранить</button>
-                </form>
+                    <div>
+                        <label class="form-label">О себе</label>
+                        <textarea
+                            name="bio"
+                            class="form-control"
+                            rows="5"
+                            placeholder="Напишите несколько слов о себе">{{ profile.bio|default_if_none:'' }}</textarea>
+                    </div>
 
+                    <button class="btn btn-primary w-100">
+                        Сохранить изменения
+                    </button>
+                </div>
+            </form>
+
+            <div class="profile-note">
+                Фотографию профиля можно изменить нажатием на изображение в верхней части страницы.
             </div>
         </div>
 
-    </div>
+    </section>
+
+    {% if notifications %}
+    <section class="section-card">
+        <div class="section-header">
+            <h3 class="section-title">
+                Уведомления
+                {% if unread_count %}<span class="badge bg-danger ms-1">{{ unread_count }}</span>{% endif %}
+            </h3>
+            {% if unread_count %}
+            <form method="post" action="{% url 'mark_notifications_read' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-secondary">Прочитать все</button>
+            </form>
+            {% endif %}
+        </div>
+        {% for n in notifications %}
+            <div style="padding:12px 0; border-bottom:1px solid #e5e7eb;">
+                <div class="fw-bold" style="font-size:14px;">{{ n.title }}</div>
+                <div class="text-muted small">{{ n.message }}</div>
+                <div class="text-muted small" style="font-size:12px;">{{ n.created_at|date:"d.m.Y H:i" }}</div>
+            </div>
+        {% endfor %}
+    </section>
+    {% endif %}
 
 </div>
 
 <script>
-document.getElementById("avatarInput").addEventListener("change", function () {
-    document.getElementById("avatarForm").submit();
-});
+const avatarInput = document.getElementById("avatarInput");
+const avatarForm = document.getElementById("avatarForm");
+
+if (avatarInput && avatarForm) {
+    avatarInput.addEventListener("change", function () {
+        avatarForm.submit();
+    });
+}
 </script>
 
 {% endblock %}

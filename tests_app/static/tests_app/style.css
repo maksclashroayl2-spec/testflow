@@ -147,3 +147,7 @@ h1, h2, h3, h4 {
     letter-spacing: 0.5px;
     color: #111827;
 }
+footer hr {
+    border-color: rgba(255, 255, 255, 0.08);
+    margin: 14px 0 10px;
+}

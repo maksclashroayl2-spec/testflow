@@ -1,0 +1,603 @@
+{% extends 'tests_app/base.html' %}
+{% block title %}О системе | TestFlow{% endblock %}
+
+{% block content %}
+
+<style>
+.about-page {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+    padding-bottom: 40px;
+}
+
+/* HERO */
+.about-hero {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 34px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 28px;
+    align-items: center;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.about-label {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+.about-title {
+    font-size: 2.3rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.12;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+}
+
+.about-text {
+    color: #526887;
+    line-height: 1.7;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.about-hero-card {
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.035);
+}
+
+.hero-card-title {
+    font-size: 1.1rem;
+    font-weight: 650;
+    color: #0f172a;
+    margin-bottom: 14px;
+}
+
+.hero-card-list {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.hero-card-list li {
+    display: flex;
+    gap: 10px;
+    color: #475569;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+.hero-card-list li::before {
+    content: "✓";
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    background: #dcfce7;
+    color: #166534;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-size: 13px;
+}
+
+/* MAIN CARDS */
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.about-card {
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.035);
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+    border-color: rgba(148, 163, 184, 0.75);
+}
+
+.about-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.about-card-title {
+    font-size: 1.12rem;
+    font-weight: 650;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.about-card-text {
+    color: #526887;
+    line-height: 1.7;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/* SECTIONS */
+.about-section {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.section-title {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 10px;
+    letter-spacing: -0.015em;
+}
+
+.section-subtitle {
+    color: #526887;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+/* ROLES */
+.role-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.role-card {
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    background: rgba(248, 250, 252, 0.84);
+    border-radius: 10px;
+    padding: 22px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.035);
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.role-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+    border-color: rgba(148, 163, 184, 0.75);
+}
+
+.role-title {
+    color: #0f172a;
+    font-size: 1.1rem;
+    font-weight: 650;
+    margin-bottom: 14px;
+}
+
+.role-list {
+    margin: 0;
+    padding-left: 18px;
+    color: #475569;
+    line-height: 1.8;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+/* TECH */
+.tech-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+
+.tech-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 11px;
+    border-radius: 8px;
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    color: #334155;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.035);
+}
+
+/* SYSTEM INFO */
+.system-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.system-info-card {
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.035);
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.system-info-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+    border-color: rgba(148, 163, 184, 0.75);
+}
+
+.system-info-label {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.system-info-value {
+    color: #0f172a;
+    font-size: 1rem;
+    font-weight: 650;
+    line-height: 1.4;
+}
+
+/* PROJECT TASKS */
+.project-task-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.project-task-card {
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.035);
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.project-task-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+    border-color: rgba(148, 163, 184, 0.75);
+}
+
+.project-task-title {
+    color: #0f172a;
+    font-weight: 650;
+    margin-bottom: 8px;
+}
+
+.project-task-text {
+    color: #526887;
+    line-height: 1.7;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/* ACTIONS */
+.about-actions {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.about-actions-text {
+    color: #526887;
+    line-height: 1.7;
+    margin: 0;
+    font-weight: 400;
+}
+
+.about-actions-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .about-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .role-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .system-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .project-task-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .about-hero,
+    .about-section,
+    .about-actions,
+    .about-card {
+        padding: 22px;
+    }
+
+    .about-title {
+        font-size: 1.75rem;
+    }
+
+    .system-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-actions-buttons,
+    .about-actions-buttons .btn {
+        width: 100%;
+    }
+}
+</style>
+
+<div class="about-page">
+
+    <section class="about-hero">
+        <div>
+            <div class="about-label">О системе</div>
+
+            <h1 class="about-title">
+                TestFlow — система онлайн-тестирования студентов
+            </h1>
+
+            <p class="about-text">
+                TestFlow предназначена для создания, прохождения и проверки учебных тестов.
+                Система позволяет преподавателям управлять тестами и вопросами, а студентам —
+                проходить тестирование, получать результат и просматривать разбор ошибок.
+            </p>
+        </div>
+
+        <div class="about-hero-card">
+            <div class="hero-card-title">Основные возможности</div>
+
+            <ul class="hero-card-list">
+                <li>создание тестов с ограничением времени;</li>
+                <li>добавление вопросов и вариантов ответов;</li>
+                <li>прикрепление изображений к вопросам;</li>
+                <li>автоматическая проверка и выставление оценки;</li>
+                <li>разбор результатов для студента и преподавателя.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="about-grid">
+        <div class="about-card">
+            <div class="about-card-icon">1</div>
+            <div class="about-card-title">Создание тестов</div>
+            <p class="about-card-text">
+                Преподаватель задаёт название, описание, время выполнения
+                и наполняет тест вопросами с вариантами ответов.
+            </p>
+        </div>
+
+        <div class="about-card">
+            <div class="about-card-icon">2</div>
+            <div class="about-card-title">Прохождение студентом</div>
+            <p class="about-card-text">
+                Студент выбирает доступный тест, отвечает на вопросы,
+                видит таймер и завершает прохождение с сохранением результата.
+            </p>
+        </div>
+
+        <div class="about-card">
+            <div class="about-card-icon">3</div>
+            <div class="about-card-title">Анализ результатов</div>
+            <p class="about-card-text">
+                Система рассчитывает баллы, процент выполнения, оценку
+                и показывает подробный разбор выбранных и правильных ответов.
+            </p>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <h2 class="section-title">Роли пользователей</h2>
+
+        <p class="section-subtitle">
+            В системе предусмотрено разделение пользователей по ролям. Это позволяет
+            ограничить доступ к функциям управления тестами и результатами.
+        </p>
+
+        <div class="role-grid">
+            <div class="role-card">
+                <div class="role-title">Студент</div>
+
+                <ul class="role-list">
+                    <li>просматривает доступные тесты;</li>
+                    <li>проходит тестирование с учётом таймера;</li>
+                    <li>видит итоговый балл, процент и оценку;</li>
+                    <li>открывает разбор своих ответов;</li>
+                    <li>просматривает историю результатов в профиле.</li>
+                </ul>
+            </div>
+
+            <div class="role-card">
+                <div class="role-title">Преподаватель</div>
+
+                <ul class="role-list">
+                    <li>создаёт и редактирует тесты;</li>
+                    <li>добавляет вопросы, ответы и изображения;</li>
+                    <li>управляет содержанием тестов;</li>
+                    <li>просматривает результаты студентов;</li>
+                    <li>анализирует ошибки по пройденным тестам.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <h2 class="section-title">Сведения о программном продукте</h2>
+
+        <p class="section-subtitle">
+            Ниже представлены основные сведения о разработанной системе, её назначении
+            и области применения.
+        </p>
+
+        <div class="system-info-grid">
+            <div class="system-info-card">
+                <div class="system-info-label">Версия системы</div>
+                <div class="system-info-value">1.0</div>
+            </div>
+
+            <div class="system-info-card">
+                <div class="system-info-label">Год разработки</div>
+                <div class="system-info-value">2026</div>
+            </div>
+
+            <div class="system-info-card">
+                <div class="system-info-label">Тип системы</div>
+                <div class="system-info-value">Веб-приложение</div>
+            </div>
+
+            <div class="system-info-card">
+                <div class="system-info-label">Назначение</div>
+                <div class="system-info-value">Онлайн-тестирование студентов</div>
+            </div>
+
+            <div class="system-info-card">
+                <div class="system-info-label">Платформа</div>
+                <div class="system-info-value">TestFlow</div>
+            </div>
+
+            <div class="system-info-card">
+                <div class="system-info-label">Роли пользователей</div>
+                <div class="system-info-value">Студент / Преподаватель</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <h2 class="section-title">Задачи, решаемые системой</h2>
+
+        <p class="section-subtitle">
+            TestFlow направлена на автоматизацию основных процессов, связанных
+            с проведением учебного тестирования.
+        </p>
+
+        <div class="project-task-grid">
+            <div class="project-task-card">
+                <div class="project-task-title">Автоматизация проверки</div>
+                <p class="project-task-text">
+                    Система автоматически рассчитывает баллы, процент выполнения
+                    и итоговую оценку после завершения теста.
+                </p>
+            </div>
+
+            <div class="project-task-card">
+                <div class="project-task-title">Кабинет</div>
+                <p class="project-task-text">
+                    Преподаватель может создавать, редактировать и наполнять
+                    тесты без обращения к администратору.
+                </p>
+            </div>
+
+            <div class="project-task-card">
+                <div class="project-task-title">Хранение результатов</div>
+                <p class="project-task-text">
+                    Все результаты прохождения сохраняются в базе данных и доступны
+                    для просмотра студенту и преподавателю.
+                </p>
+            </div>
+
+            <div class="project-task-card">
+                <div class="project-task-title">Разбор ошибок</div>
+                <p class="project-task-text">
+                    После прохождения теста можно открыть подробный разбор с отображением
+                    выбранных и правильных ответов.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <h2 class="section-title">Техническая основа проекта</h2>
+
+        <p class="section-subtitle">
+            Приложение разработано как веб-система с серверной обработкой данных,
+            хранением пользователей, тестов, вопросов, ответов и результатов прохождения.
+        </p>
+
+        <div class="tech-list">
+            <span class="tech-badge">Python</span>
+            <span class="tech-badge">Django</span>
+            <span class="tech-badge">SQLite / PostgreSQL</span>
+            <span class="tech-badge">HTML</span>
+            <span class="tech-badge">CSS</span>
+            <span class="tech-badge">Bootstrap</span>
+            <span class="tech-badge">Django ORM</span>
+            <span class="tech-badge">Email verification</span>
+        </div>
+    </section>
+
+    <section class="about-actions">
+        <p class="about-actions-text">
+            Перейдите к списку тестов или авторизуйтесь, чтобы использовать возможности системы.
+        </p>
+
+        <div class="about-actions-buttons">
+            <a href="{% url 'tests_list' %}" class="btn btn-primary">
+                К тестам
+            </a>
+
+            {% if not user.is_authenticated %}
+                <a href="{% url 'login' %}" class="btn btn-outline-secondary">
+                    Войти
+                </a>
+            {% endif %}
+        </div>
+    </section>
+
+</div>
+
+{% endblock %}

@@ -1,195 +1,438 @@
 {% extends "tests_app/base.html" %}
-{% block title %}Разбор теста{% endblock %}
+{% block title %}Разбор теста | TestFlow{% endblock %}
 
 {% block content %}
 
 <style>
-.review-wrap {
+.review-page {
     max-width: 1100px;
-    margin: 30px auto 50px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
 }
 
 .review-header {
-    background: rgba(255,255,255,0.88);
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    border-radius: 28px;
-    padding: 30px;
-    box-shadow: 0 14px 38px rgba(15, 23, 42, 0.06);
-    margin-bottom: 24px;
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 28px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 22px;
+    align-items: center;
+}
+
+.review-label {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 14px;
 }
 
 .review-title {
     font-size: 2rem;
     font-weight: 800;
-    margin-bottom: 10px;
     color: #0f172a;
+    line-height: 1.15;
+    margin-bottom: 12px;
 }
 
-.review-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 14px;
+.review-text {
+    color: #64748b;
+    line-height: 1.7;
+    margin: 0;
 }
 
-.review-badge {
-    padding: 8px 14px;
-    border-radius: 999px;
+.review-summary {
     background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    color: #334155;
-    font-weight: 600;
-    font-size: 0.92rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.summary-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 12px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.summary-row span {
+    color: #64748b;
+}
+
+.summary-row strong {
+    color: #0f172a;
+    text-align: right;
 }
 
 .question-card {
-    background: rgba(255,255,255,0.9);
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    border-radius: 24px;
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
     padding: 24px;
-    box-shadow: 0 14px 38px rgba(15, 23, 42, 0.06);
-    margin-bottom: 20px;
 }
 
-.question-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #0f172a;
+.question-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
     margin-bottom: 18px;
 }
 
-.answer-list {
+.question-title {
+    font-size: 1.15rem;
+    font-weight: 750;
+    color: #0f172a;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.question-heading-right {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.question-number {
+    flex-shrink: 0;
+    min-width: 38px;
+    height: 32px;
+    padding: 0 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+}
+
+.question-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.status-correct {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.status-partial {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.status-wrong {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+/* Картинка вопроса */
+.review-question-image-wrap {
+    margin: 0 0 18px;
+    border: 1px solid #dbe2ea;
+    border-radius: 12px;
+    background: #f8fafc;
+    padding: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.review-question-image {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    max-height: 480px;
+    border-radius: 10px;
+    object-fit: contain;
+}
+
+.answer-list {
+    display: grid;
+    gap: 10px;
 }
 
 .answer-item {
-    border-radius: 16px;
+    border-radius: 8px;
     padding: 14px 16px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #e5e7eb;
     background: #f8fafc;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
 }
 
 .answer-item.correct {
-    background: #dcfce7;
-    border-color: #86efac;
+    background: #f0fdf4;
+    border-color: #bbf7d0;
 }
 
 .answer-item.wrong-selected {
-    background: #fee2e2;
-    border-color: #fca5a5;
+    background: #fef2f2;
+    border-color: #fecaca;
 }
 
 .answer-text {
-    color: #1f2937;
-    font-weight: 500;
+    color: #334155;
+    line-height: 1.6;
+    font-size: 15px;
 }
 
 .answer-labels {
     display: flex;
     flex-wrap: wrap;
+    justify-content: flex-end;
     gap: 8px;
+    flex-shrink: 0;
 }
 
 .label-badge {
-    padding: 5px 10px;
-    border-radius: 999px;
-    font-size: 0.82rem;
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-size: 12px;
     font-weight: 700;
     white-space: nowrap;
 }
 
 .label-correct {
-    background: #166534;
-    color: white;
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
 }
 
 .label-selected {
-    background: #1d4ed8;
-    color: white;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
 }
 
 .label-wrong {
-    background: #dc2626;
-    color: white;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
 }
 
-.back-btn {
-    margin-top: 10px;
+.text-answer-block {
+    display: grid;
+    gap: 10px;
 }
 
 .empty-box {
-    background: rgba(255,255,255,0.9);
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    border-radius: 24px;
-    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 28px;
     text-align: center;
     color: #64748b;
 }
 
+.review-actions {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.review-actions p {
+    color: #64748b;
+    margin: 0;
+    line-height: 1.6;
+}
+
 @media (max-width: 768px) {
-    .review-title {
-        font-size: 1.6rem;
+    .review-header {
+        grid-template-columns: 1fr;
+    }
+
+    .question-top {
+        flex-direction: column;
     }
 
     .answer-item {
         flex-direction: column;
         align-items: flex-start;
     }
+
+    .answer-labels {
+        justify-content: flex-start;
+    }
+
+    .review-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .review-actions .btn {
+        width: 100%;
+    }
 }
 </style>
 
-<div class="container review-wrap">
+<div class="review-page">
 
-    <div class="review-header">
-        <div class="review-title">{{ test.title }} — разбор</div>
-        <p class="mb-2 text-muted">
-            Здесь показаны правильные ответы и ответы, которые выбрал студент.
-        </p>
+    <section class="review-header">
+        <div>
+            <div class="review-label">Разбор результата</div>
 
-        <div class="review-meta">
-            <div class="review-badge">Баллы: {{ result.score }}</div>
-            <div class="review-badge">Процент: {{ result.percent }}%</div>
-            <div class="review-badge">Оценка: {{ result.grade }}</div>
+            <h1 class="review-title">
+                {{ test.title }}
+            </h1>
+
+            <p class="review-text">
+                На этой странице показаны ответы, выбранные пользователем,
+                и правильные варианты для каждого вопроса.
+            </p>
         </div>
-    </div>
+
+        <div class="review-summary">
+            <div class="summary-title">Итог прохождения</div>
+
+            <div class="summary-row">
+                <span>Баллы</span>
+                <strong>{{ result.score }}</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Процент выполнения</span>
+                <strong>{{ result.percent }}%</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Оценка</span>
+                <strong>{{ result.grade }}</strong>
+            </div>
+        </div>
+    </section>
 
     {% if review_data %}
         {% for item in review_data %}
-            <div class="question-card">
-                <div class="question-title">
-                    {{ forloop.counter }}. {{ item.question_text }}
+            <section class="question-card">
+
+                <div class="question-top">
+                    <h2 class="question-title">
+                        {{ item.question_text }}
+                    </h2>
+
+                    <div class="question-heading-right">
+                        <div class="question-status {{ item.status_class }}">
+                            {{ item.status_label }}
+                        </div>
+
+                        <div class="question-number">
+                            {{ forloop.counter }}
+                        </div>
+                    </div>
                 </div>
 
-                <div class="answer-list">
-                    {% for answer in item.answers %}
-                        <div class="answer-item {% if answer.is_correct %}correct{% endif %}{% if answer.is_selected and not answer.is_correct %} wrong-selected{% endif %}">
+                {% if item.question_image %}
+                    <div class="review-question-image-wrap">
+                        <img
+                            src="{{ item.question_image.url }}"
+                            alt="Изображение к вопросу"
+                            class="review-question-image">
+                    </div>
+                {% endif %}
+
+                {% if item.question_type == 'text' %}
+                    <div class="text-answer-block">
+                        <div class="answer-item {% if item.is_correct %}correct{% else %}wrong-selected{% endif %}">
                             <div class="answer-text">
-                                {{ answer.text }}
+                                <strong>Ответ пользователя:</strong>
+                                {{ item.user_text|default:"—" }}
                             </div>
 
                             <div class="answer-labels">
-                                {% if answer.is_correct %}
-                                    <span class="label-badge label-correct">Правильный ответ</span>
-                                {% endif %}
-
-                                {% if answer.is_selected and answer.is_correct %}
-                                    <span class="label-badge label-selected">Ваш ответ</span>
-                                {% endif %}
-
-                                {% if answer.is_selected and not answer.is_correct %}
-                                    <span class="label-badge label-wrong">Ваш ответ</span>
+                                {% if item.is_correct %}
+                                    <span class="label-badge label-correct">Верно</span>
+                                {% else %}
+                                    <span class="label-badge label-wrong">Неверно</span>
                                 {% endif %}
                             </div>
                         </div>
-                    {% endfor %}
-                </div>
-            </div>
+
+                        <div class="answer-item correct">
+                            <div class="answer-text">
+                                <strong>Правильный ответ:</strong>
+                                {{ item.correct_text|default:"—" }}
+                            </div>
+
+                            <div class="answer-labels">
+                                <span class="label-badge label-correct">Эталон</span>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="answer-list">
+                        {% for answer in item.answers %}
+                            <div class="answer-item {% if answer.is_correct %}correct{% endif %}{% if answer.is_selected and not answer.is_correct %} wrong-selected{% endif %}">
+                                <div class="answer-text">
+                                    {{ answer.text }}
+                                </div>
+
+                                <div class="answer-labels">
+                                    {% if answer.is_correct %}
+                                        <span class="label-badge label-correct">
+                                            Правильный ответ
+                                        </span>
+                                    {% endif %}
+
+                                    {% if answer.is_selected and answer.is_correct %}
+                                        <span class="label-badge label-selected">
+                                            Выбрано
+                                        </span>
+                                    {% endif %}
+
+                                    {% if answer.is_selected and not answer.is_correct %}
+                                        <span class="label-badge label-wrong">
+                                            Выбрано неверно
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </section>
         {% endfor %}
     {% else %}
         <div class="empty-box">
@@ -197,9 +440,21 @@
         </div>
     {% endif %}
 
-    <a href="{% url 'profile' %}" class="btn btn-secondary back-btn">
-        ← Назад в профиль
-    </a>
+    <section class="review-actions">
+        <p>
+            Можно вернуться в профиль или перейти к списку доступных тестов.
+        </p>
+
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="{% url 'profile' %}" class="btn btn-outline-secondary">
+                Вернуться в профиль
+            </a>
+
+            <a href="{% url 'tests_list' %}" class="btn btn-primary">
+                К списку тестов
+            </a>
+        </div>
+    </section>
 
 </div>
 

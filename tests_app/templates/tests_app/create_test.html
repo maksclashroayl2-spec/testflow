@@ -1,23 +1,447 @@
 {% extends "tests_app/base.html" %}
+{% block title %}Создать тест | TestFlow{% endblock %}
+
 {% block content %}
 
-<div class="container mt-5">
-    <h3>Создать тест</h3>
+<style>
+.create-page {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+    padding-bottom: 40px;
+}
 
-    <form method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label>Название теста</label>
-            <input type="text" name="title" class="form-control" required>
+.create-header {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 28px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 24px;
+    align-items: center;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.create-label {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+.create-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+}
+
+.create-text {
+    color: #526887;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.create-info {
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.035);
+}
+
+.info-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 12px;
+}
+
+.info-list {
+    margin: 0;
+    padding-left: 18px;
+    color: #475569;
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+.create-card {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.form-section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 18px;
+}
+
+.form-label {
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.form-hint {
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 6px;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    color: #0f172a;
+}
+
+.form-control:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.12);
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.availability-box {
+    margin-top: 6px;
+    margin-bottom: 22px;
+    padding: 18px;
+    border-radius: 10px;
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+}
+
+.availability-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.availability-text {
+    color: #526887;
+    line-height: 1.65;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 18px;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 6px;
+}
+
+.actions-left,
+.actions-right {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .create-header {
+        grid-template-columns: 1fr;
+    }
+
+    .create-header,
+    .create-card {
+        padding: 22px;
+    }
+
+    .create-title {
+        font-size: 1.65rem;
+    }
+
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .actions-left,
+    .actions-right {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+</style>
+
+<div class="create-page">
+
+    <section class="create-header">
+        <div>
+            <div class="create-label">Создание теста</div>
+
+            <h1 class="create-title">
+                Новый тест
+            </h1>
+
+            <p class="create-text">
+                Укажите название, описание, время прохождения, количество попыток
+                и период доступности теста для студентов.
+            </p>
         </div>
 
-        <div class="mb-3">
-            <label>Описание</label>
-            <textarea name="description" class="form-control"></textarea>
-        </div>
+        <div class="create-info">
+            <div class="info-title">Что будет создано</div>
 
-        <button class="btn btn-success">Создать</button>
-    </form>
+            <ul class="info-list">
+                <li>карточка теста для студентов;</li>
+                <li>раздел для добавления вопросов;</li>
+                <li>основа для автоматической проверки;</li>
+                <li>ограничение по времени и попыткам;</li>
+                <li>период доступности тестирования;</li>
+                <li>страница результатов прохождения.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="create-card">
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-section-title">
+                Основные данные
+            </div>
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="mb-4">
+                <label class="form-label">Название теста</label>
+                <input
+                    type="text"
+                    name="title"
+                    class="form-control"
+                    placeholder="Например: Основы информатики"
+                    value="{{ form.title.value|default_if_none:'' }}"
+                    required>
+
+                {% if form.title.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ form.title.errors }}
+                    </div>
+                {% endif %}
+
+                <div class="form-hint">
+                    Название будет отображаться в списке доступных тестов.
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Описание</label>
+                <textarea
+                    name="description"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Кратко опишите тему и цель теста">{{ form.description.value|default_if_none:'' }}</textarea>
+
+                {% if form.description.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ form.description.errors }}
+                    </div>
+                {% endif %}
+
+                <div class="form-hint">
+                    Описание помогает студенту понять, по какой теме проводится проверка.
+                </div>
+            </div>
+
+            <div class="settings-grid">
+                <div class="mb-4">
+                    <label class="form-label">Время на прохождение, минут</label>
+                    <input
+                        type="number"
+                        name="time_limit"
+                        class="form-control"
+                        min="1"
+                        value="{{ form.time_limit.value|default:'10' }}"
+                        required>
+
+                    {% if form.time_limit.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.time_limit.errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="form-hint">
+                        После истечения времени тестирование будет завершено автоматически.
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Количество попыток</label>
+                    <input
+                        type="number"
+                        name="max_attempts"
+                        class="form-control"
+                        min="0"
+                        value="{{ form.max_attempts.value|default:'1' }}"
+                        required>
+
+                    {% if form.max_attempts.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.max_attempts.errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="form-hint">
+                        Укажите 1, 2, 3 попытки или 0, если тест можно проходить без ограничений.
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-grid mb-4">
+                <div>
+                    <label class="form-label">Категория / предмет</label>
+                    <select name="category" class="form-select">
+                        <option value="">Без категории</option>
+                        {% for category in form.fields.category.queryset %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Видимость теста</label>
+                    <select name="visibility" class="form-select" id="visibilitySelect">
+                        <option value="all">Для всех студентов</option>
+                        <option value="groups">Только для выбранных групп</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-4" id="groupsBlock" style="display:none;">
+                <label class="form-label">Группы</label>
+                <div class="d-flex flex-wrap gap-3">
+                    {% for checkbox in form.assigned_groups %}
+                        <label class="d-flex align-items-center gap-2">{{ checkbox.tag }} {{ checkbox.choice_label }}</label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-4 mb-4">
+                <label class="d-flex align-items-center gap-2">
+                    <input type="checkbox" name="shuffle_questions" class="form-check-input">
+                    Перемешивать вопросы
+                </label>
+                <label class="d-flex align-items-center gap-2">
+                    <input type="checkbox" name="shuffle_answers" class="form-check-input">
+                    Перемешивать ответы
+                </label>
+            </div>
+
+            <div class="availability-box">
+                <div class="availability-title">
+                    Период доступности
+                </div>
+
+                <p class="availability-text">
+                    Можно указать дату и время, когда тест станет доступен студентам,
+                    а также дату окончания прохождения. Если оставить поля пустыми,
+                    тест будет работать без ограничения по датам.
+                </p>
+
+                <div class="settings-grid">
+                    <div>
+                        <label class="form-label">Доступен с</label>
+                        <input
+                            type="datetime-local"
+                            name="available_from"
+                            class="form-control"
+                            value="{{ form.available_from.value|default_if_none:'' }}">
+
+                        {% if form.available_from.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.available_from.errors }}
+                            </div>
+                        {% endif %}
+
+                        <div class="form-hint">
+                            Если поле пустое, тест будет доступен сразу после публикации.
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Доступен до</label>
+                        <input
+                            type="datetime-local"
+                            name="available_until"
+                            class="form-control"
+                            value="{{ form.available_until.value|default_if_none:'' }}">
+
+                        {% if form.available_until.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.available_until.errors }}
+                            </div>
+                        {% endif %}
+
+                        <div class="form-hint">
+                            Если поле пустое, тест не будет иметь даты окончания.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <div class="actions-left">
+                    <a href="{% url 'teacher_dashboard' %}" class="btn btn-outline-secondary">
+                        Назад
+                    </a>
+                </div>
+
+                <div class="actions-right">
+                    <button type="submit" class="btn btn-primary">
+                        Создать тест
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
+
 </div>
+
+<script>
+const visibilitySelect = document.getElementById('visibilitySelect');
+const groupsBlock = document.getElementById('groupsBlock');
+if (visibilitySelect && groupsBlock) {
+    function toggleGroups() {
+        groupsBlock.style.display = visibilitySelect.value === 'groups' ? 'block' : 'none';
+    }
+    visibilitySelect.addEventListener('change', toggleGroups);
+    toggleGroups();
+}
+</script>
 
 {% endblock %}

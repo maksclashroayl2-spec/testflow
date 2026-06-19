@@ -1,0 +1,342 @@
+{% extends 'tests_app/base.html' %}
+{% block title %}Помощь | TestFlow{% endblock %}
+
+{% block content %}
+
+<style>
+.help-page {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+}
+
+.help-hero {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 32px;
+}
+
+.help-label {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.help-title {
+    font-size: 2.25rem;
+    font-weight: 850;
+    color: #0f172a;
+    line-height: 1.15;
+    margin-bottom: 14px;
+}
+
+.help-text {
+    color: #64748b;
+    line-height: 1.75;
+    max-width: 820px;
+    margin: 0;
+}
+
+.help-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.help-card {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 26px;
+}
+
+.help-card-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.help-card-text {
+    color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 18px;
+}
+
+.help-steps {
+    display: grid;
+    gap: 12px;
+}
+
+.help-step {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.step-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+}
+
+.step-content {
+    color: #475569;
+    line-height: 1.65;
+    font-weight: 600;
+}
+
+.help-section {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 28px;
+}
+
+.section-title {
+    font-size: 1.45rem;
+    font-weight: 820;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.section-subtitle {
+    color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.faq-list {
+    display: grid;
+    gap: 12px;
+}
+
+.faq-item {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 18px;
+}
+
+.faq-question {
+    color: #0f172a;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.faq-answer {
+    color: #64748b;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.help-actions {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.help-actions-text {
+    color: #64748b;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.help-actions-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+    .help-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .help-hero,
+    .help-card,
+    .help-section,
+    .help-actions {
+        padding: 22px;
+    }
+
+    .help-title {
+        font-size: 1.75rem;
+    }
+
+    .help-actions-buttons,
+    .help-actions-buttons .btn {
+        width: 100%;
+    }
+}
+</style>
+
+<div class="help-page">
+
+    <section class="help-hero">
+        <div class="help-label">Помощь</div>
+
+        <h1 class="help-title">
+            Как пользоваться TestFlow
+        </h1>
+
+        <p class="help-text">
+            На этой странице собраны основные инструкции для студентов и преподавателей.
+            Они помогают быстрее разобраться с прохождением тестов, созданием заданий,
+            публикацией тестов и просмотром результатов.
+        </p>
+    </section>
+
+    <section class="help-grid">
+
+        <div class="help-card">
+            <h2 class="help-card-title">Для студента</h2>
+
+            <p class="help-card-text">
+                Студент может проходить опубликованные тесты, получать итоговый результат
+                и открывать подробный разбор своих ответов.
+            </p>
+
+            <div class="help-steps">
+                <div class="help-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">Откройте раздел «Тесты» и выберите доступный тест.</div>
+                </div>
+
+                <div class="help-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">Ознакомьтесь с описанием, временем прохождения и количеством попыток.</div>
+                </div>
+
+                <div class="help-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">Нажмите кнопку начала теста и ответьте на вопросы.</div>
+                </div>
+
+                <div class="help-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">После завершения посмотрите баллы, процент, оценку и разбор ошибок.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="help-card">
+            <h2 class="help-card-title">Для преподавателя</h2>
+
+            <p class="help-card-text">
+                Преподаватель управляет тестами, добавляет вопросы, публикует материалы
+                и анализирует результаты студентов.
+            </p>
+
+            <div class="help-steps">
+                <div class="help-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">Откройте «Кабинет» и создайте новый тест.</div>
+                </div>
+
+                <div class="help-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">Заполните название, описание, лимит времени и количество попыток.</div>
+                </div>
+
+                <div class="help-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">Добавьте вопросы, ответы, правильные варианты и изображения при необходимости.</div>
+                </div>
+
+                <div class="help-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">Опубликуйте тест после проверки готовности и просматривайте результаты студентов.</div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="help-section">
+        <h2 class="section-title">Частые вопросы</h2>
+
+        <p class="section-subtitle">
+            Ниже приведены ответы на основные вопросы, которые могут возникнуть при работе с системой.
+        </p>
+
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-question">Почему студент не видит тест?</div>
+                <p class="faq-answer">
+                    Тест должен быть опубликован преподавателем. Если тест скрыт или содержит незаполненные вопросы,
+                    он не отображается студентам.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Почему тест нельзя опубликовать?</div>
+                <p class="faq-answer">
+                    Система проверяет готовность теста перед публикацией. В тесте должен быть хотя бы один вопрос,
+                    а у вопросов с вариантами ответа должны быть ответы и отмеченный правильный вариант.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Можно ли добавить изображение к вопросу?</div>
+                <p class="faq-answer">
+                    Да. Преподаватель может добавить изображение при создании вопроса, а затем заменить или удалить его
+                    при редактировании.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Где посмотреть ошибки после прохождения?</div>
+                <p class="faq-answer">
+                    После завершения теста студент может открыть разбор результата. Преподаватель также может посмотреть
+                    разбор по каждому студенту в разделе результатов теста.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="help-actions">
+        <p class="help-actions-text">
+            Перейдите к нужному разделу, чтобы продолжить работу с системой.
+        </p>
+
+        <div class="help-actions-buttons">
+            <a href="{% url 'tests_list' %}" class="btn btn-primary">
+                К тестам
+            </a>
+
+            {% if user.is_authenticated and user.profile.role == 'teacher' %}
+                <a href="{% url 'teacher_dashboard' %}" class="btn btn-outline-primary">
+                    Кабинет
+                </a>
+            {% endif %}
+        </div>
+    </section>
+
+</div>
+
+{% endblock %}

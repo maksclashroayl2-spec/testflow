@@ -1,0 +1,580 @@
+{% extends 'tests_app/base.html' %}
+{% block title %}Профиль преподавателя | TestFlow{% endblock %}
+
+{% block content %}
+
+<style>
+.teacher-profile-page {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+    padding-bottom: 40px;
+}
+
+/* ===== PROFILE CARD ===== */
+.profile-card {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 26px 30px;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.profile-label {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.profile-main {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+}
+
+.avatar-box {
+    width: 104px;
+    height: 104px;
+    border-radius: 12px;
+    background: #f1f5f9;
+    border: 1px solid #dbe2ea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.avatar-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-fallback {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #1d4ed8;
+}
+
+.profile-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.15;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+}
+
+.profile-email {
+    color: #526887;
+    margin-bottom: 12px;
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.profile-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.info-mini-card {
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.035);
+}
+
+.info-mini-label {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.info-mini-value {
+    color: #0f172a;
+    font-weight: 650;
+    line-height: 1.4;
+}
+
+.info-section {
+    border-top: 1px solid #e5e7eb;
+    padding-top: 20px;
+}
+
+.info-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 12px;
+}
+
+.bio-box {
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    border-radius: 10px;
+    padding: 16px 18px;
+    color: #475569;
+    line-height: 1.7;
+    min-height: 82px;
+}
+
+/*STATS*/
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-top: 2px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+    backdrop-filter: blur(10px);
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    color: #526887;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.stat-card.primary .stat-value {
+    color: #1d4ed8;
+}
+
+.stat-card.success .stat-value {
+    color: #15803d;
+}
+
+.stat-card.warning .stat-value {
+    color: #d97706;
+}
+
+/* ===== RESULTS ===== */
+.results-card {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.section-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.section-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 8px;
+    letter-spacing: -0.015em;
+}
+
+.section-subtitle {
+    color: #526887;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.grade-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.grade-card {
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.035);
+}
+
+.grade-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 6px;
+}
+
+.grade-label {
+    color: #526887;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.recent-list {
+    display: grid;
+    gap: 10px;
+}
+
+.recent-item {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr auto;
+    gap: 14px;
+    align-items: center;
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+
+.recent-student {
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.recent-test {
+    color: #526887;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.recent-date {
+    color: #526887;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.result-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 86px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.empty-results {
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+    color: #64748b;
+    line-height: 1.7;
+}
+
+/* ===== ACTIONS ===== */
+.profile-actions {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 22px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.actions-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 6px;
+}
+
+.actions-text {
+    color: #526887;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.actions-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1000px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grade-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .recent-item {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-name {
+        font-size: 1.55rem;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .actions-buttons {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .actions-buttons .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .profile-card,
+    .profile-actions,
+    .results-card {
+        padding: 22px;
+    }
+
+    .profile-main {
+        align-items: flex-start;
+    }
+
+    .stats-grid,
+    .grade-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .avatar-box {
+        width: 92px;
+        height: 92px;
+    }
+}
+</style>
+
+<div class="teacher-profile-page">
+
+    <section class="profile-card">
+        <div class="profile-label">Профиль преподавателя</div>
+
+        <div class="profile-main">
+            <div class="avatar-box">
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="Аватар">
+                {% else %}
+                    <div class="avatar-fallback">TF</div>
+                {% endif %}
+            </div>
+
+            <div>
+                <div class="profile-name">
+                    {{ profile.full_name|default:request.user.email|default:request.user.username }}
+                </div>
+
+                <div class="profile-email">
+                    {{ request.user.email|default:request.user.username }}
+                </div>
+
+                <div class="role-badge">
+                    Доступ к управлению
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-info-grid">
+            <div class="info-mini-card">
+                <div class="info-mini-label">Роль</div>
+                <div class="info-mini-value">Преподаватель</div>
+            </div>
+
+            <div class="info-mini-card">
+                <div class="info-mini-label">Основной доступ</div>
+                <div class="info-mini-value">Кабинет</div>
+            </div>
+
+            <div class="info-mini-card">
+                <div class="info-mini-label">Раздел</div>
+                <div class="info-mini-value">TestFlow</div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="info-title">О себе</div>
+
+            <div class="bio-box">
+                {% if profile.bio %}
+                    {{ profile.bio }}
+                {% else %}
+                    Преподаватель осуществляет создание учебных тестов, управление вопросами и анализ результатов прохождения студентами.
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-grid">
+        <div class="stat-card primary">
+            <div class="stat-value">{{ total_tests }}</div>
+            <div class="stat-label">Создано тестов</div>
+        </div>
+
+        <div class="stat-card success">
+            <div class="stat-value">{{ active_tests }}</div>
+            <div class="stat-label">Активных тестов</div>
+        </div>
+
+        <div class="stat-card warning">
+            <div class="stat-value">{{ hidden_tests }}</div>
+            <div class="stat-label">Скрытых тестов</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-value">{{ total_attempts }}</div>
+            <div class="stat-label">Всего прохождений</div>
+        </div>
+
+        <div class="stat-card primary">
+            <div class="stat-value">{{ avg_percent }}%</div>
+            <div class="stat-label">Средний результат</div>
+        </div>
+    </section>
+
+    <section class="results-card">
+        <div class="section-top">
+            <div>
+                <h2 class="section-title">Аналитика результатов</h2>
+                <p class="section-subtitle">
+                    Сводная информация по оценкам и последним прохождениям тестов студентами.
+                </p>
+            </div>
+        </div>
+
+        <div class="grade-grid">
+            <div class="grade-card">
+                <div class="grade-value">{{ grade_5_count }}</div>
+                <div class="grade-label">Оценок «5»</div>
+            </div>
+
+            <div class="grade-card">
+                <div class="grade-value">{{ grade_4_count }}</div>
+                <div class="grade-label">Оценок «4»</div>
+            </div>
+
+            <div class="grade-card">
+                <div class="grade-value">{{ grade_3_count }}</div>
+                <div class="grade-label">Оценок «3»</div>
+            </div>
+
+            <div class="grade-card">
+                <div class="grade-value">{{ grade_2_count }}</div>
+                <div class="grade-label">Оценок «2»</div>
+            </div>
+        </div>
+
+        {% if recent_results %}
+            <div class="recent-list">
+                {% for result in recent_results %}
+                    <div class="recent-item">
+                        <div>
+                            <div class="recent-student">
+                                {{ result.student.profile.full_name|default:result.student.email|default:result.student.username }}
+                            </div>
+
+                            <div class="recent-test">
+                                {{ result.test.title }}
+                            </div>
+                        </div>
+
+                        <div class="recent-date">
+                            {{ result.created_at|date:"d.m.Y H:i" }}
+                        </div>
+
+                        <div class="result-badge">
+                            {{ result.percent }}% / {{ result.grade }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-results">
+                Пока нет прохождений тестов. Когда студенты начнут проходить тесты,
+                здесь появятся последние результаты.
+            </div>
+        {% endif %}
+    </section>
+
+    <section class="profile-actions">
+        <div>
+            <div class="actions-title">Быстрые действия</div>
+            <p class="actions-text">
+                Перейдите к управлению тестами, создайте новый тест или отредактируйте данные профиля.
+            </p>
+        </div>
+
+        <div class="actions-buttons">
+            <a href="{% url 'teacher_dashboard' %}" class="btn btn-primary">
+                Кабинет
+            </a>
+
+            <a href="{% url 'create_test' %}" class="btn btn-outline-primary">
+                Создать тест
+            </a>
+
+            <a href="{% url 'edit_teacher_profile' %}" class="btn btn-outline-primary">
+                Редактировать профиль
+            </a>
+        </div>
+    </section>
+
+</div>
+
+{% endblock %}

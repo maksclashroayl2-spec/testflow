@@ -5,107 +5,100 @@
 
 <style>
 .auth-page {
-    min-height: 72vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.auth-shell {
-    width: 100%;
-    max-width: 1080px;
+    max-width: 1040px;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: 1.02fr 0.98fr;
-    gap: 28px;
+    grid-template-columns: 0.95fr 1.05fr;
+    gap: 20px;
     align-items: stretch;
 }
 
+/*INFO*/
 .auth-info {
-    position: relative;
-    overflow: hidden;
-    border-radius: 30px;
-    padding: 42px 38px;
-    background:
-        radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.12), transparent 22%),
-        linear-gradient(135deg, rgba(255,255,255,0.9), rgba(246,250,255,0.95));
-    border: 1px solid rgba(226, 232, 240, 0.85);
-    box-shadow: 0 22px 60px rgba(15, 23, 42, 0.08);
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 28px;
 }
 
-.auth-info-content {
-    position: relative;
-    z-index: 1;
-}
-
-.auth-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px 14px;
-    border-radius: 999px;
-    background: rgba(37, 99, 235, 0.08);
+.auth-label {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
     color: #1d4ed8;
+    font-size: 13px;
     font-weight: 700;
-    font-size: .92rem;
-    margin-bottom: 18px;
-}
-
-.auth-title {
-    font-size: 2.2rem;
-    font-weight: 800;
-    line-height: 1.15;
-    color: #0f172a;
-    margin-bottom: 16px;
-}
-
-.auth-subtitle {
-    color: #64748b;
-    line-height: 1.8;
-    margin-bottom: 26px;
-    max-width: 520px;
-}
-
-.auth-feature {
-    background: rgba(255,255,255,0.72);
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    border-radius: 18px;
-    padding: 16px 18px;
     margin-bottom: 14px;
 }
 
-.auth-feature-title {
+.auth-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.15;
+    margin-bottom: 12px;
+}
+
+.auth-text {
+    color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 22px;
+}
+
+.auth-list {
+    display: grid;
+    gap: 12px;
+}
+
+.auth-list-item {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.auth-list-title {
     font-weight: 700;
     color: #0f172a;
     margin-bottom: 6px;
 }
 
-.auth-feature-text {
+.auth-list-text {
     color: #64748b;
+    line-height: 1.6;
+    font-size: 14px;
     margin: 0;
-    line-height: 1.7;
 }
 
+/*FORM */
 .auth-card {
-    background: rgba(255,255,255,0.92);
-    border: 1px solid rgba(226, 232, 240, 0.85);
-    border-radius: 30px;
-    padding: 36px 32px;
-    box-shadow: 0 22px 60px rgba(15, 23, 42, 0.08);
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 28px;
 }
 
 .auth-card-title {
-    font-size: 2rem;
+    font-size: 1.65rem;
     font-weight: 800;
     color: #0f172a;
-    text-align: center;
     margin-bottom: 8px;
 }
 
 .auth-card-subtitle {
-    text-align: center;
     color: #64748b;
-    margin-bottom: 26px;
+    line-height: 1.7;
+    margin-bottom: 22px;
+}
+
+.message-box {
+    margin-bottom: 16px;
+}
+
+.message-box .alert {
+    margin-bottom: 10px;
 }
 
 .form-label {
@@ -114,19 +107,32 @@
     margin-bottom: 8px;
 }
 
-.message-box .alert {
-    margin-bottom: 14px;
-    border-radius: 14px;
+.form-note {
+    display: block;
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 6px;
+    line-height: 1.5;
+}
+
+.code-input {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 6px;
 }
 
 .auth-footer {
-    text-align: center;
     margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid #e5e7eb;
     color: #64748b;
+    text-align: center;
+    font-size: 14px;
 }
 
 .auth-footer a {
-    color: #2563eb;
+    color: #1d4ed8;
     text-decoration: none;
     font-weight: 700;
 }
@@ -135,93 +141,119 @@
     text-decoration: underline;
 }
 
-@media (max-width: 992px) {
-    .auth-shell {
+@media (max-width: 900px) {
+    .auth-page {
         grid-template-columns: 1fr;
+    }
+
+    .auth-card {
+        order: 1;
+    }
+
+    .auth-info {
+        order: 2;
     }
 }
 
 @media (max-width: 576px) {
-    .auth-card,
-    .auth-info {
-        padding: 26px 20px;
-        border-radius: 22px;
+    .auth-info,
+    .auth-card {
+        padding: 22px;
     }
 
     .auth-title {
-        font-size: 1.8rem;
+        font-size: 1.65rem;
     }
 
     .auth-card-title {
-        font-size: 1.65rem;
+        font-size: 1.45rem;
+    }
+
+    .code-input {
+        letter-spacing: 3px;
     }
 }
 </style>
 
 <div class="auth-page">
-    <div class="auth-shell">
 
-        <div class="auth-info">
-            <div class="auth-info-content">
-                <div class="auth-badge">📩 Подтверждение почты</div>
+    <section class="auth-info">
+        <div class="auth-label">Подтверждение email</div>
 
-                <h1 class="auth-title">Подтверди email перед созданием аккаунта</h1>
+        <h1 class="auth-title">
+            Завершение регистрации
+        </h1>
 
-                <p class="auth-subtitle">
-                    На указанную почту отправлен код подтверждения. Введите его справа,
-                    чтобы завершить регистрацию и активировать аккаунт в TestFlow.
+        <p class="auth-text">
+            На указанный адрес электронной почты отправлен код подтверждения.
+            Введите его в форму, чтобы активировать аккаунт и получить доступ к системе.
+        </p>
+
+        <div class="auth-list">
+            <div class="auth-list-item">
+                <div class="auth-list-title">Проверка адреса</div>
+                <p class="auth-list-text">
+                    Подтверждение email помогает убедиться, что аккаунт создаётся владельцем указанной почты.
                 </p>
+            </div>
 
-                <div class="auth-feature">
-                    <div class="auth-feature-title">Зачем это нужно</div>
-                    <p class="auth-feature-text">
-                        Это защищает систему от регистрации на чужой email и делает аккаунты более надёжными.
-                    </p>
-                </div>
+            <div class="auth-list-item">
+                <div class="auth-list-title">Код из письма</div>
+                <p class="auth-list-text">
+                    Код состоит из шести цифр. Его нужно ввести без пробелов и дополнительных символов.
+                </p>
+            </div>
 
-                <div class="auth-feature">
-                    <div class="auth-feature-title">Если письмо не пришло</div>
-                    <p class="auth-feature-text">
-                        Проверьте спам, правильность адреса или посмотрите код в консоли сервера, если включён тестовый режим.
-                    </p>
-                </div>
+            <div class="auth-list-item">
+                <div class="auth-list-title">Если письмо не пришло</div>
+                <p class="auth-list-text">
+                    Проверьте папку «Спам» и убедитесь, что email был указан правильно.
+                </p>
             </div>
         </div>
+    </section>
 
-        <div class="auth-card">
-            <div class="auth-card-title">Подтверждение email</div>
-            <div class="auth-card-subtitle">Введите код из письма</div>
+    <section class="auth-card">
+        <h2 class="auth-card-title">Введите код</h2>
 
-            <div class="message-box">
-                {% for message in messages %}
-                    <div class="alert alert-info">{{ message }}</div>
-                {% endfor %}
-            </div>
+        <p class="auth-card-subtitle">
+            Укажите 6-значный код подтверждения из письма.
+        </p>
 
-            <form method="POST">
-                {% csrf_token %}
-
-                <div class="mb-3">
-                    <label class="form-label">Код подтверждения</label>
-                    <input type="text"
-                           name="code"
-                           class="form-control"
-                           maxlength="6"
-                           placeholder="Введите 6-значный код"
-                           required>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100">
-                    Подтвердить email
-                </button>
-            </form>
-
-            <div class="auth-footer">
-                Ошиблись в данных? <a href="{% url 'register' %}">Вернуться к регистрации</a>
-            </div>
+        <div class="message-box">
+            {% for message in messages %}
+                <div class="alert alert-info">{{ message }}</div>
+            {% endfor %}
         </div>
 
-    </div>
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-4">
+                <label class="form-label">Код подтверждения</label>
+                <input
+                    type="text"
+                    name="code"
+                    class="form-control code-input"
+                    maxlength="6"
+                    inputmode="numeric"
+                    placeholder="000000"
+                    required>
+                <small class="form-note">
+                    Введите код, который был отправлен на email при регистрации.
+                </small>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                Подтвердить email
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            Нужно изменить данные? <a href="{% url 'register' %}">Вернуться к регистрации</a>
+        </div>
+    </section>
+
 </div>
 
 {% endblock %}

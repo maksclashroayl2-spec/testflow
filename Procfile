@@ -1,1 +1,1 @@
-web: gunicorn diplom_project.wsgi:application
+web: gunicorn testflow_project.wsgi:application

@@ -1,0 +1,409 @@
+{% extends "tests_app/base.html" %}
+{% block title %}{{ test.title }} | TestFlow{% endblock %}
+
+{% block content %}
+
+<style>
+.detail-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    gap: 22px;
+    padding-bottom: 40px;
+}
+
+.detail-header {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 30px;
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 24px;
+    align-items: start;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.detail-label {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+.detail-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.18;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+}
+
+.detail-description {
+    color: #526887;
+    line-height: 1.75;
+    margin: 0;
+}
+
+.detail-info-card {
+    background: rgba(248, 250, 252, 0.84);
+    border: 1px solid rgba(219, 226, 234, 0.95);
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.035);
+}
+
+.detail-info-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 12px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row span {
+    color: #64748b;
+}
+
+.detail-row strong {
+    color: #0f172a;
+    text-align: right;
+    font-weight: 650;
+}
+
+.status-available {
+    color: #15803d !important;
+}
+
+.status-unavailable {
+    color: #b45309 !important;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.detail-stat {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+    backdrop-filter: blur(10px);
+}
+
+.detail-stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.detail-stat-label {
+    color: #526887;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.rules-card {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 26px;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.rules-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 16px;
+}
+
+.rules-list {
+    margin: 0;
+    padding-left: 20px;
+    color: #475569;
+    line-height: 1.8;
+}
+
+.rules-list li {
+    margin-bottom: 8px;
+}
+
+.start-card {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(219, 226, 234, 0.85);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.start-text {
+    color: #526887;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.start-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.not-ready {
+    background: rgba(255, 247, 237, 0.92);
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-weight: 600;
+    line-height: 1.6;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.04);
+}
+
+.available-message {
+    background: rgba(240, 253, 244, 0.92);
+    border: 1px solid #bbf7d0;
+    color: #166534;
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-weight: 600;
+    line-height: 1.6;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.04);
+}
+
+@media (max-width: 900px) {
+    .detail-header {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .start-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .start-actions {
+        flex-direction: column;
+    }
+
+    .start-actions .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .detail-header,
+    .rules-card,
+    .start-card {
+        padding: 22px;
+    }
+
+    .detail-title {
+        font-size: 1.65rem;
+    }
+}
+</style>
+
+<div class="detail-page">
+
+    <section class="detail-header">
+        <div>
+            <div class="detail-label">Информация о тесте</div>
+
+            <h1 class="detail-title">{{ test.title }}</h1>
+
+            <p class="detail-description">
+                {% if test.description %}
+                    {{ test.description }}
+                {% else %}
+                    Описание теста пока не добавлено. Перед началом внимательно ознакомьтесь
+                    с количеством вопросов, лимитом времени и правилами прохождения.
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="detail-info-card">
+            <div class="detail-info-title">Параметры</div>
+
+            <div class="detail-row">
+                <span>Вопросов</span>
+                <strong>{{ total_questions }}</strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Время</span>
+                <strong>
+                    {% if test.time_limit %}
+                        {{ test.time_limit }} мин.
+                    {% else %}
+                        без лимита
+                    {% endif %}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Попытки</span>
+                <strong>
+                    {% if test.max_attempts == 0 %}
+                        без ограничений
+                    {% else %}
+                        {{ attempts_used }} из {{ test.max_attempts }}
+                    {% endif %}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Доступен с</span>
+                <strong>
+                    {% if test.available_from %}
+                        {{ test.available_from|date:"d.m.Y H:i" }}
+                    {% else %}
+                        сразу
+                    {% endif %}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Доступен до</span>
+                <strong>
+                    {% if test.available_until %}
+                        {{ test.available_until|date:"d.m.Y H:i" }}
+                    {% else %}
+                        без ограничения
+                    {% endif %}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Статус</span>
+                <strong class="{% if is_available and total_questions > 0 %}status-available{% else %}status-unavailable{% endif %}">
+                    {% if total_questions == 0 %}
+                        Не готов
+                    {% elif is_available %}
+                        Доступен
+                    {% else %}
+                        Недоступен
+                    {% endif %}
+                </strong>
+            </div>
+        </div>
+    </section>
+
+    <section class="detail-grid">
+        <div class="detail-stat">
+            <div class="detail-stat-value">{{ total_questions }}</div>
+            <div class="detail-stat-label">всего вопросов</div>
+        </div>
+
+        <div class="detail-stat">
+            <div class="detail-stat-value">{{ choice_questions }}</div>
+            <div class="detail-stat-label">с выбором ответа</div>
+        </div>
+
+        <div class="detail-stat">
+            <div class="detail-stat-value">{{ text_questions }}</div>
+            <div class="detail-stat-label">текстовых вопросов</div>
+        </div>
+    </section>
+
+    <section class="rules-card">
+        <div class="rules-title">Правила прохождения</div>
+
+        <ul class="rules-list">
+            <li>После нажатия кнопки «Начать прохождение» запустится таймер теста.</li>
+            <li>В тесте могут встречаться вопросы с одним ответом, несколькими ответами и текстовым вводом.</li>
+            <li>Ответы сохраняются при переходе между вопросами.</li>
+            <li>После завершения теста система автоматически рассчитает баллы, процент и итоговую оценку.</li>
+            <li>Если время закончится, тест будет завершён автоматически.</li>
+            <li>Если срок доступности теста завершён, начать прохождение будет нельзя.</li>
+        </ul>
+    </section>
+
+    {% if not is_available %}
+        <section class="not-ready">
+            {{ availability_message }}
+        </section>
+
+        <a href="{% url 'tests_list' %}" class="btn btn-outline-secondary">
+            Назад к тестам
+        </a>
+
+    {% elif attempts_limit_reached %}
+        <section class="not-ready">
+            Лимит попыток для этого теста исчерпан.
+            Повторное прохождение недоступно.
+        </section>
+
+        <a href="{% url 'tests_list' %}" class="btn btn-outline-secondary">
+            Назад к тестам
+        </a>
+
+    {% elif total_questions > 0 %}
+        <section class="start-card">
+            <p class="start-text">
+                Когда будете готовы, начните прохождение. Таймер запустится только после нажатия кнопки.
+                {% if test.max_attempts > 0 %}
+                    Осталось попыток: {{ attempts_left }}.
+                {% else %}
+                    Количество попыток не ограничено.
+                {% endif %}
+            </p>
+
+            <div class="start-actions">
+                <a href="{% url 'tests_list' %}" class="btn btn-outline-secondary">
+                    Назад к тестам
+                </a>
+
+                <a href="{% url 'start_test' test.id %}" class="btn btn-primary">
+                    Начать прохождение
+                </a>
+            </div>
+        </section>
+
+    {% else %}
+        <section class="not-ready">
+            Этот тест пока не содержит вопросов, поэтому его нельзя начать.
+            Вернитесь к списку тестов и выберите другой доступный тест.
+        </section>
+
+        <a href="{% url 'tests_list' %}" class="btn btn-outline-secondary">
+            Назад к тестам
+        </a>
+    {% endif %}
+
+</div>
+
+{% endblock %}

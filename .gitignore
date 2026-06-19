@@ -5,5 +5,10 @@ __pycache__/
 *.pyc
 *.log
 db.sqlite3
+dem.db
+dem_exam.db
 staticfiles/
 media/
+.vscode/
+.idea/
+*.sqlite3

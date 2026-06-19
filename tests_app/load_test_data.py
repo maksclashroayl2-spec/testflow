@@ -2,7 +2,7 @@ import os
 import django
 
 # Настройка окружения Django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "diplom_project.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "testflow_project.settings")
 django.setup()
 
 from tests_app.models import Test, Question, Answer

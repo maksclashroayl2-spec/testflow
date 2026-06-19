@@ -1,0 +1,495 @@
+{% extends 'tests_app/base.html' %}
+{% block title %}Кабинет | TestFlow{% endblock %}
+
+{% block content %}
+
+<style>
+.teacher-page {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+}
+
+/* ===== HEADER ===== */
+.teacher-header {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.teacher-label {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.teacher-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.15;
+    margin-bottom: 12px;
+}
+
+.teacher-text {
+    color: #64748b;
+    line-height: 1.7;
+    max-width: 760px;
+    margin: 0;
+}
+
+.teacher-header-action {
+    flex-shrink: 0;
+}
+
+/* ===== SUMMARY ===== */
+.teacher-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.teacher-summary-card {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 22px;
+}
+
+.teacher-summary-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.teacher-summary-label {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ===== TESTS ===== */
+.tests-section {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 24px;
+}
+
+.section-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.section-title {
+    font-size: 1.35rem;
+    font-weight: 750;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.section-text {
+    color: #64748b;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* ===== SEARCH ===== */
+.teacher-search {
+    margin: 18px 0 22px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+}
+
+.teacher-search-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.teacher-search input {
+    height: 44px;
+}
+
+.search-result-note {
+    margin-top: 10px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.search-result-note strong {
+    color: #0f172a;
+}
+
+.tests-table-wrap {
+    overflow-x: auto;
+}
+
+.tests-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 860px;
+}
+
+.tests-table th {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.tests-table td {
+    padding: 16px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
+    color: #334155;
+}
+
+.tests-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.test-title {
+    font-weight: 750;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.test-description {
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.5;
+    max-width: 420px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 6px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.status-active {
+    background: #ecfdf5;
+    border-color: #bbf7d0;
+    color: #15803d;
+}
+
+.status-hidden {
+    background: #fff7ed;
+    border-color: #fed7aa;
+    color: #c2410c;
+}
+.actions-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.actions-group form {
+    margin: 0;
+}
+
+/* ===== EMPTY ===== */
+.empty-tests {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    padding: 34px;
+    text-align: center;
+}
+
+.empty-tests-title {
+    font-size: 1.25rem;
+    font-weight: 750;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.empty-tests-text {
+    color: #64748b;
+    line-height: 1.7;
+    max-width: 640px;
+    margin: 0 auto 20px;
+}
+
+@media (max-width: 900px) {
+    .teacher-header {
+        flex-direction: column;
+    }
+
+    .teacher-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .teacher-header-action {
+        width: 100%;
+    }
+
+    .teacher-header-action .btn {
+        width: 100%;
+    }
+
+    .teacher-search-row {
+        grid-template-columns: 1fr;
+    }
+
+    .teacher-search-row .btn {
+        width: 100%;
+    }
+}
+</style>
+
+<div class="teacher-page">
+
+    <section class="teacher-header">
+        <div>
+            <div class="teacher-label">Кабинет преподавателя</div>
+
+            <h1 class="teacher-title">
+                Кабинет
+            </h1>
+
+            <p class="teacher-text">
+                Здесь отображаются созданные тесты. Преподаватель может редактировать содержание,
+                добавлять вопросы, просматривать результаты студентов и удалять неактуальные материалы.
+            </p>
+        </div>
+
+        <div class="teacher-header-action">
+            <a href="{% url 'create_test' %}" class="btn btn-primary">
+                Создать тест
+            </a>
+        </div>
+    </section>
+
+    <section class="teacher-summary-grid">
+        <div class="teacher-summary-card">
+            <div class="teacher-summary-value">{{ tests|length }}</div>
+            <div class="teacher-summary-label">
+                {% if query %}
+                    Найдено тестов
+                {% else %}
+                    Всего тестов
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="teacher-summary-card">
+            <div class="teacher-summary-value">
+                {% if tests %}
+                    {{ tests|length }}
+                {% else %}
+                    0
+                {% endif %}
+            </div>
+            <div class="teacher-summary-label">Доступно для управления</div>
+        </div>
+
+        <div class="teacher-summary-card">
+            <div class="teacher-summary-value">1</div>
+            <div class="teacher-summary-label">Кабинет преподавателя</div>
+        </div>
+    </section>
+
+    <section class="tests-section">
+        <div class="section-top">
+            <div>
+                <h2 class="section-title">Список тестов</h2>
+                <p class="section-text">
+                    Используйте поиск и действия в таблице для управления каждым тестом.
+                </p>
+            </div>
+        </div>
+
+        <form method="get" class="teacher-search">
+            <div class="teacher-search-row">
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ query }}"
+                    id="teacherSearchInput"
+                    class="form-control"
+                    autocomplete="off"
+                    placeholder="Начните вводить название теста">
+
+
+
+                
+
+                {% if query %}
+                    <a href="{% url 'teacher_dashboard' %}" class="btn btn-outline-secondary">
+                        Сбросить
+                    </a>
+                {% endif %}
+            </div>
+
+            {% if query %}
+                <div class="search-result-note">
+                    Результаты поиска по запросу: <strong>{{ query }}</strong>
+                </div>
+            {% endif %}
+        </form>
+
+        {% if tests %}
+            <div class="tests-table-wrap">
+                <table class="tests-table">
+                    <thead>
+                        <tr>
+                            <th>Тест</th>
+                            <th>Дата создания</th>
+                            <th>Время</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for test in tests %}
+                            <tr id="test-{{ test.id }}" class="test-row" data-search="{{ test.title|lower }} {{ test.description|default:''|lower }}">
+                                <td>
+                                    <div class="test-title">{{ test.title }}</div>
+
+                                    <div class="test-description">
+                                        {% if test.description %}
+                                            {{ test.description|truncatechars:120 }}
+                                        {% else %}
+                                            Описание не добавлено.
+                                        {% endif %}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    {{ test.created_at|date:"d.m.Y" }}
+                                </td>
+
+                                <td>
+                                    {% if test.time_limit %}
+                                        {{ test.time_limit }} мин.
+                                    {% else %}
+                                        Без лимита
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                        {% if test.is_active %}
+                                    <span class="status-badge status-active">Активен</span>
+                                        {% else %}
+                                    <span class="status-badge status-hidden">Скрыт</span>
+                                        {% endif %}
+                                </td>
+
+                                <td>
+                                    <div class="actions-group">
+                                        <a href="{% url 'edit_test' test.id %}" class="btn btn-sm btn-outline-primary">
+                                            Редактировать
+                                        </a>
+
+                                        <a href="{% url 'test_results' test.id %}" class="btn btn-sm btn-outline-secondary">
+                                            Результаты
+                                        </a>
+                                        <form method="post" action="{% url 'toggle_test_status' test.id %}">
+                                            {% csrf_token %}
+                                            {% if test.is_active %}
+                                            <button type="submit" class="btn btn-sm btn-outline-warning">
+                                                Скрыть
+                                            </button>
+                                            {% else %}
+                                            <button type="submit" class="btn btn-sm btn-outline-success">
+                                                Опубликовать
+                                            </button>
+                                            {% endif %}
+                                        </form>
+                                        <form method="post" action="{% url 'delete_test' test.id %}">
+                                            {% csrf_token %}
+                                            <button
+                                                type="submit"
+                                                class="btn btn-sm btn-outline-danger"
+                                                onclick="return confirm('Удалить тест?')">
+                                                Удалить
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-tests">
+                {% if query %}
+                    <div class="empty-tests-title">По запросу ничего не найдено</div>
+                    <p class="empty-tests-text">
+                        Попробуйте изменить запрос или сбросить поиск, чтобы снова увидеть полный список тестов.
+                    </p>
+
+                    <a href="{% url 'teacher_dashboard' %}" class="btn btn-primary">
+                        Показать все тесты
+                    </a>
+                {% else %}
+                    <div class="empty-tests-title">Пока нет созданных тестов</div>
+                    <p class="empty-tests-text">
+                        После создания первого теста он появится в этом разделе.
+                        Здесь можно будет редактировать содержание, смотреть результаты и управлять тестированием.
+                    </p>
+
+                    <a href="{% url 'create_test' %}" class="btn btn-primary">
+                        Создать первый тест
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </section>
+
+</div>
+            <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                    const searchInput = document.getElementById("teacherSearchInput");
+                    const rows = document.querySelectorAll(".test-row");
+
+                    if (!searchInput) return;
+
+                    searchInput.addEventListener("input", function () {
+                    const query = searchInput.value.trim().toLowerCase();
+
+                    rows.forEach(function (row) {
+                    const text = row.dataset.search || "";
+
+                    if (text.includes(query)) {
+                         row.style.display = "";
+                     } else {
+                    row.style.display = "none";
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

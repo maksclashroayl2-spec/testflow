@@ -1,0 +1,76 @@
+{% extends 'tests_app/base.html' %}
+{% block title %}Группы | TestFlow{% endblock %}
+
+{% block content %}
+<style>
+.groups-page { max-width: 900px; margin: 0 auto; display: grid; gap: 20px; }
+.page-card { background: #fff; border: 1px solid #dbe2ea; border-radius: 10px; padding: 28px; }
+.group-item { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid #e5e7eb; }
+.group-item:last-child { border-bottom: none; }
+.group-meta { color: #64748b; font-size: 14px; }
+.search-box { padding: 16px; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 10px; }
+.search-box input { height: 44px; }
+.student-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; font-size: 13px; font-weight: 600; margin: 3px; }
+.student-chip .remove-btn { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 14px; padding: 0 2px; }
+.students-list { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.no-students { color: #94a3b8; font-size: 13px; }
+</style>
+
+<div class="groups-page">
+    <section class="page-card">
+        <h1 class="h3 fw-bold mb-2">Группы студентов</h1>
+        <p class="text-muted mb-0">Создавайте группы и добавляйте в них студентов.</p>
+    </section>
+
+    <section class="page-card">
+        <h2 class="h5 fw-bold mb-3">Новая группа</h2>
+        <form method="post" class="d-flex gap-2">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="create">
+            {{ form.name }}
+            <button class="btn btn-primary" type="submit">Создать</button>
+        </form>
+    </section>
+
+    <section class="page-card">
+        <h2 class="h5 fw-bold mb-3">Список групп</h2>
+
+        <div class="search-box mb-3">
+            <input type="text" id="groupSearch" class="form-control" placeholder="Поиск по названию группы..." autocomplete="off">
+        </div>
+
+        <div id="groupsList">
+        {% for item in groups_data %}
+            <div class="group-item group-row" data-search="{{ item.group.name|lower }}">
+                <div style="flex:1;">
+                    <a href="{% url 'group_detail' item.group.id %}" class="fw-bold text-decoration-none" style="color:#0f172a; font-size:1.05rem;">{{ item.group.name }}</a>
+                    <div class="group-meta">Студентов: {{ item.students_count }} · Тестов: {{ item.tests_count }}</div>
+                </div>
+                <form method="post" onsubmit="return confirm('Удалить группу?');">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="group_id" value="{{ item.group.id }}">
+                    <button class="btn btn-sm btn-outline-danger" type="submit">Удалить</button>
+                </form>
+            </div>
+        {% empty %}
+            <p class="text-muted mb-0">Групп пока нет.</p>
+        {% endfor %}
+        </div>
+    </section>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var input = document.getElementById("groupSearch");
+    if (!input) return;
+    input.addEventListener("input", function() {
+        var q = input.value.trim().toLowerCase();
+        document.querySelectorAll(".group-row").forEach(function(row) {
+            var text = row.dataset.search || "";
+            row.style.display = text.includes(q) ? "" : "none";
+        });
+    });
+});
+</script>
+{% endblock %}

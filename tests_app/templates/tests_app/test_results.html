@@ -1,23 +1,669 @@
 {% extends "tests_app/base.html" %}
+{% block title %}Результаты теста | TestFlow{% endblock %}
+
 {% block content %}
 
-<div class="container mt-5">
-    <h3>Результаты по тесту: {{ test.title }}</h3>
+<style>
+.results-page {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+}
 
-    {% for result in results %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <strong>{{ result.student.username }}</strong><br>
-                Баллы: {{ result.score }}<br>
-                Процент: {{ result.percent }}%<br>
-                Оценка: {{ result.grade }}
+/* HEADER */
+.results-header {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.results-label {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.results-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.15;
+    margin-bottom: 12px;
+}
+
+.results-text {
+    color: #64748b;
+    line-height: 1.7;
+    max-width: 760px;
+    margin: 0;
+}
+
+.results-header-action {
+    flex-shrink: 0;
+}
+
+/* SUMMARY */
+.results-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+}
+
+.summary-card {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 22px;
+}
+
+.summary-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.summary-label {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* GRADES */
+.grade-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.grade-stat-card {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.grade-stat-title {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.grade-stat-value {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+/* FILTERS */
+.results-filter {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 18px;
+}
+
+.filter-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 12px;
+}
+
+.filter-row {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 12px;
+    align-items: center;
+}
+
+.filter-note {
+    margin-top: 10px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* TABLE */
+.results-section {
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 24px;
+}
+
+.section-top {
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 1.35rem;
+    font-weight: 750;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.section-text {
+    color: #64748b;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.results-table-wrap {
+    overflow-x: auto;
+}
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1080px;
+}
+
+.results-table th {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.results-table td {
+    padding: 16px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
+    color: #334155;
+}
+
+.results-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.student-name {
+    font-weight: 750;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.student-email {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.grade-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 13px;
+}
+
+.grade-5 {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.grade-4 {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+
+.grade-3 {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.grade-2 {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+/* STATUS */
+.result-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.status-passed {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.status-failed {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+/* ACTIONS */
+.result-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.result-actions form {
+    margin: 0;
+}
+
+.btn-outline-danger {
+    border: 1px solid #dc2626;
+    color: #dc2626 !important;
+    background: #ffffff;
+}
+
+.btn-outline-danger:hover,
+.btn-outline-danger:focus,
+.btn-outline-danger:active {
+    background: #dc2626 !important;
+    border-color: #dc2626 !important;
+    color: #ffffff !important;
+}
+
+.empty-state,
+.no-results-state {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    padding: 34px;
+    text-align: center;
+}
+
+.no-results-state {
+    display: none;
+}
+
+.empty-title {
+    font-size: 1.25rem;
+    font-weight: 750;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.empty-text {
+    color: #64748b;
+    line-height: 1.7;
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+@media (max-width: 1100px) {
+    .results-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grade-stat-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .results-header {
+        flex-direction: column;
+    }
+
+    .results-header-action {
+        width: 100%;
+    }
+
+    .results-header-action .btn {
+        width: 100%;
+    }
+
+    .filter-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .results-summary-grid,
+    .grade-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .results-header,
+    .results-section,
+    .results-filter {
+        padding: 20px;
+    }
+
+    .results-title {
+        font-size: 1.6rem;
+    }
+}
+</style>
+
+<div class="results-page">
+
+    <section class="results-header">
+        <div>
+            <div class="results-label">Анализ результатов</div>
+
+            <h1 class="results-title">
+                {{ test.title }}
+            </h1>
+
+            <p class="results-text">
+                На этой странице преподаватель может просматривать результаты студентов,
+                анализировать средний процент выполнения, оценки, лучшие и слабые результаты.
+            </p>
+        </div>
+
+        <div class="results-header-action d-flex gap-2 flex-wrap">
+            {% if results %}
+                <a href="{% url 'export_test_results' test.id %}" class="btn btn-primary">
+                    Скачать результаты
+                </a>
+                <a href="{% url 'export_test_results_pdf' test.id %}" class="btn btn-outline-primary">
+                    Скачать PDF-отчёт
+                </a>
+            {% endif %}
+
+            <a href="{% url 'teacher_dashboard' %}" class="btn btn-outline-secondary">
+                Назад в кабинет
+            </a>
+        </div>
+    </section>
+
+    <section class="results-summary-grid">
+        <div class="summary-card">
+            <div class="summary-value" id="visibleResultsCount">{{ attempts_count }}</div>
+            <div class="summary-label">Прохождений</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-value">{{ avg_percent }}%</div>
+            <div class="summary-label">Средний результат</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-value">{{ avg_grade }}</div>
+            <div class="summary-label">Средняя оценка</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-value">{{ best_percent }}%</div>
+            <div class="summary-label">Лучший результат</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-value">{{ worst_percent }}%</div>
+            <div class="summary-label">Слабый результат</div>
+        </div>
+    </section>
+
+    <section class="grade-stat-grid">
+        <div class="grade-stat-card">
+            <div class="grade-stat-title">Оценка 5</div>
+            <div class="grade-stat-value">{{ grade_5_count }}</div>
+        </div>
+
+        <div class="grade-stat-card">
+            <div class="grade-stat-title">Оценка 4</div>
+            <div class="grade-stat-value">{{ grade_4_count }}</div>
+        </div>
+
+        <div class="grade-stat-card">
+            <div class="grade-stat-title">Оценка 3</div>
+            <div class="grade-stat-value">{{ grade_3_count }}</div>
+        </div>
+
+        <div class="grade-stat-card">
+            <div class="grade-stat-title">Оценка 2</div>
+            <div class="grade-stat-value">{{ grade_2_count }}</div>
+        </div>
+    </section>
+
+    {% if results %}
+        <section class="results-filter">
+            <div class="filter-title">Поиск и фильтрация результатов</div>
+
+            <div class="filter-row">
+                <input
+                    type="text"
+                    id="resultSearchInput"
+                    class="form-control"
+                    autocomplete="off"
+                    placeholder="Введите имя или email студента">
+
+                <select id="gradeFilter" class="form-select">
+                    <option value="">Все оценки</option>
+                    <option value="5">Оценка 5</option>
+                    <option value="4">Оценка 4</option>
+                    <option value="3">Оценка 3</option>
+                    <option value="2">Оценка 2</option>
+                </select>
             </div>
+
+            <div class="filter-note">
+                Фильтр работает сразу без перезагрузки страницы.
+            </div>
+        </section>
+    {% endif %}
+
+    <section class="results-section">
+        <div class="section-top">
+            <h2 class="section-title">Список результатов</h2>
+            <p class="section-text">
+                Таблица позволяет быстро оценить выполнение теста каждым студентом.
+            </p>
         </div>
-    {% empty %}
-        <div class="alert alert-info">
-            Пока никто не проходил этот тест.
+
+        {% if results %}
+            <div class="results-table-wrap">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Студент</th>
+                            <th>Баллы</th>
+                            <th>Процент</th>
+                            <th>Оценка</th>
+                            <th>Статус</th>
+                            <th>Дата прохождения</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for result in results %}
+                            <tr
+                                class="result-row"
+                                data-search="{{ result.student.profile.full_name|default:result.student.email|default:result.student.username|lower }} {{ result.student.email|default:result.student.username|lower }}"
+                                data-grade="{{ result.grade }}"
+                            >
+                                <td>
+                                    <div class="student-name">
+                                        {{ result.student.profile.full_name|default:result.student.email|default:result.student.username }}
+                                    </div>
+
+                                    <div class="student-email">
+                                        {{ result.student.email|default:result.student.username }}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    {{ result.score }}
+                                </td>
+
+                                <td>
+                                    {{ result.percent }}%
+                                </td>
+
+                                <td>
+                                    <span class="grade-badge grade-{{ result.grade }}">
+                                        {{ result.grade }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    {% if result.percent >= 50 %}
+                                        <span class="result-status status-passed">
+                                            Сдан
+                                        </span>
+                                    {% else %}
+                                        <span class="result-status status-failed">
+                                            Не сдан
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {{ result.created_at|date:"d.m.Y H:i" }}
+                                </td>
+
+                                <td>
+                                    <div class="result-actions">
+                                        <a href="{% url 'teacher_review_result' result.id %}" class="btn btn-sm btn-outline-primary">
+                                            Разбор
+                                        </a>
+
+                                        <form method="post"
+                                              action="{% url 'delete_result' result.id %}"
+                                              onsubmit="return confirm('Вы уверены, что хотите удалить результат этого студента?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                Удалить
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="no-results-state" id="noResultsState">
+                <div class="empty-title">Результаты не найдены</div>
+                <p class="empty-text">
+                    Измените поисковый запрос или выберите другую оценку в фильтре.
+                </p>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-title">Пока никто не проходил этот тест</div>
+                <p class="empty-text">
+                    Когда студенты начнут выполнять тест, результаты автоматически появятся в этом разделе.
+                </p>
+            </div>
+        {% endif %}
+    </section>
+
+    {% if question_stats %}
+    <section class="page-card">
+        <h2 class="h5 fw-bold mb-3">Статистика по вопросам</h2>
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th style="width:40px;">#</th>
+                        <th>Вопрос</th>
+                        <th>Тип</th>
+                        <th class="text-center">Верных</th>
+                        <th style="width:180px;">%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for qs in question_stats %}
+                        <tr>
+                            <td class="fw-bold">{{ forloop.counter }}</td>
+                            <td>{{ qs.text }}</td>
+                            <td><span class="small text-muted">{{ qs.type }}</span></td>
+                            <td class="text-center">{{ qs.correct }} / {{ qs.total }}</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="flex:1; height:8px; background:#e5e7eb; border-radius:999px; overflow:hidden;">
+                                        <div style="height:100%; border-radius:999px; width:{{ qs.percent }}%; {% if qs.percent >= 70 %}background:#16a34a;{% elif qs.percent >= 40 %}background:#f59e0b;{% else %}background:#dc2626;{% endif %}"></div>
+                                    </div>
+                                    <span class="small fw-bold" style="min-width:48px; text-align:right;">{{ qs.percent }}%</span>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-    {% endfor %}
+    </section>
+    {% endif %}
+
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("resultSearchInput");
+    const gradeFilter = document.getElementById("gradeFilter");
+    const rows = document.querySelectorAll(".result-row");
+    const noResultsState = document.getElementById("noResultsState");
+    const visibleCount = document.getElementById("visibleResultsCount");
+
+    function applyFilters() {
+        const searchQuery = searchInput ? searchInput.value.trim().toLowerCase() : "";
+        const selectedGrade = gradeFilter ? gradeFilter.value : "";
+        let count = 0;
+
+        rows.forEach(function (row) {
+            const rowText = row.dataset.search || "";
+            const rowGrade = row.dataset.grade || "";
+
+            const matchesSearch = rowText.includes(searchQuery);
+            const matchesGrade = !selectedGrade || rowGrade === selectedGrade;
+
+            if (matchesSearch && matchesGrade) {
+                row.style.display = "";
+                count++;
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        if (visibleCount) {
+            visibleCount.textContent = count;
+        }
+
+        if (noResultsState) {
+            noResultsState.style.display = count === 0 ? "block" : "none";
+        }
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener("input", applyFilters);
+    }
+
+    if (gradeFilter) {
+        gradeFilter.addEventListener("change", applyFilters);
+    }
+});
+</script>
 
 {% endblock %}
