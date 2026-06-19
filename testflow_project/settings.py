@@ -15,17 +15,15 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-dev-key-change-me")
 
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
-    if host.strip()
-]
+_allowed = [h.strip() for h in os.getenv("ALLOWED_HOSTS", "").split(",") if h.strip()]
+if not _allowed:
+    _allowed = ["web-production-5f737.up.railway.app", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = _allowed
 
-CSRF_TRUSTED_ORIGINS = [
-    origin.strip()
-    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
-    if origin.strip()
-]
+_csrf = [o.strip() for o in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if o.strip()]
+if not _csrf:
+    _csrf = ["https://web-production-5f737.up.railway.app"]
+CSRF_TRUSTED_ORIGINS = _csrf
 
 
 #ПРИЛОЖЕНИЯ
