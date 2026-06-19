@@ -224,6 +224,11 @@
             {% for message in messages %}
                 <div class="alert alert-info">{{ message }}</div>
             {% endfor %}
+            {% if dev_code %}
+                <div class="alert alert-success" style="font-size:1.3rem;font-weight:700;">
+                    Ваш код: {{ dev_code }}
+                </div>
+            {% endif %}
         </div>
 
         <form method="POST">

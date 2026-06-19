@@ -1601,7 +1601,10 @@ def verify_email_view(request):
         messages.success(request, "Email успешно подтверждён. Аккаунт создан.")
         return redirect('profile')
 
-    return render(request, 'tests_app/verify_email.html')
+    show_code = 'console' in settings.EMAIL_BACKEND
+    return render(request, 'tests_app/verify_email.html', {
+        'dev_code': session_code if show_code else None,
+    })
 
 @login_required
 def teacher_profile(request):
