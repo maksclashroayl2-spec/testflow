@@ -619,35 +619,33 @@ def register_view(request):
             messages.error(request, "Неверный секретный код преподавателя")
             return redirect('register')
 
-        code = str(secrets.randbelow(900000) + 100000)
-
         from django.contrib.auth.hashers import make_password
-        request.session['pending_registration'] = {
-            'full_name': full_name,
-            'email': email,
-            'password_hash': make_password(password),
-            'role': role,
-            'student_group_id': request.POST.get('student_group', '').strip(),
-        }
-        request.session['email_verification_code'] = code
+        password_hash = make_password(password)
 
-        try:
-            send_mail(
-                subject='Код подтверждения TestFlow',
-                message=f'Ваш код подтверждения: {code}',
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[email],
-                fail_silently=False,
-            )
-            messages.success(request, "Код подтверждения отправлен на вашу почту")
-        except Exception as e:
-            logger.exception("Ошибка отправки email при регистрации")
-            messages.warning(
-                request,
-                "Не удалось отправить письмо. Попробуйте позже."
-            )
+        user = User.objects.create_user(
+            username=email,
+            email=email,
+            password=None,
+        )
+        user.password = password_hash
+        user.save(update_fields=['password'])
 
-        return redirect('verify_email')
+        profile = user.profile
+        profile.role = role
+        profile.full_name = full_name
+
+        group_id = request.POST.get('student_group', '').strip()
+        if role == 'student' and group_id:
+            try:
+                profile.student_group = StudentGroup.objects.get(id=int(group_id))
+            except (StudentGroup.DoesNotExist, ValueError, TypeError):
+                pass
+
+        profile.save()
+        login(request, user)
+
+        messages.success(request, "Аккаунт создан. Добро пожаловать!")
+        return redirect('profile')
 
     return render(request, 'tests_app/register.html', {
         'student_groups': StudentGroup.objects.all().order_by('name'),
